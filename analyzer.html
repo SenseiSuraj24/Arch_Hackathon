@@ -1,64 +1,222 @@
-<!-- Wrap everything in .analyzer-app for CSS scoping -->
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Attack Risk Analyzer | Vital Link</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"> 
 </head>
-<div class="analyzer-app">
-    <div class="container">
-        <header>
-            <span class="logo">💗</span>
-            <h1>Heart Attack Risk Analyzer</h1>
-        </header>
-        <div class="card">
-            <div class="language-select">
-                <label>Choose Language</label>
-                <div>
-                    <input type="radio" name="lang" id="en" checked>
-                    <label for="en">English</label>
+<body class="analyzer-page">
+
+    <div class="analyzer-container">
+
+        <header class="analyzer-header">
+            <div class="logo-title">
+                <span class="icon">❤️</span> 
+                <h1>Heart Attack Risk Analyzer</h1>
+            </div>
+            <div class="user-actions">
                 </div>
-            </div>
-        </div>
-        <div class="card form-area">
-            <label for="age">Age</label>
-            <input type="number" id="age" min="0" max="120">
+        </header>
 
-            <label>Gender (1 = Male, 0 = Female)</label>
-            <div class="gender-row">
-                <input type="radio" name="gender" id="male" value="1">
-                <label for="male">1</label>
-                <input type="radio" name="gender" id="female" value="0">
-                <label for="female">0</label>
-            </div>
+        <main class="analyzer-main">
 
-            <label for="heartrate">Heart Rate</label>
-            <input type="number" id="heartrate" min="0">
-            <label for="sbp">Systolic BP</label>
-            <input type="number" id="sbp" min="0">
-            <label for="dbp">Diastolic BP</label>
-            <input type="number" id="dbp" min="0">
-            <label for="sugar">Blood Sugar</label>
-            <input type="number" id="sugar" min="0">
-            <label for="ckmb">CK-MB</label>
-            <input type="number" id="ckmb" min="0">
-            <label for="troponin">Troponin</label>
-            <input type="number" id="troponin" min="0">
+            <section class="analyzer-card settings-card">
+                <h2 class="card-title">General Settings</h2>
+                <div class="form-group">
+                    <label>Choose Language</label>
+                    <div class="radio-group">
+                        <input type="radio" id="lang-english" name="language" value="english" checked>
+                        <label for="lang-english">English</label>
+                        
+                    </div>
+                </div>
+            </section>
 
-            <button class="main-btn">Analyze Risk</button>
-        </div>
-        <div class="card">
-            <label for="result">Prediction Result</label>
-            <textarea id="result" rows="2" readonly></textarea>
-        </div>
-        <!-- Download Report button outside card, wide and distinct -->
-        <div class="wide-btn-row">
-            <button class="main-btn wide-btn">Download Report</button>
-        </div>
-        <!-- Full Report card below the button -->
-        <div class="card report-section">
-            <label for="fullreport">Full Report</label>
-            <textarea id="fullreport" rows="3" readonly></textarea>
-        </div>
-    </div>
-</div>
-<footer class="site-footer">
-    <p>&copy; 2025 Vital Link. All Rights Reserved. | Privacy Policy</p>
-</footer>
+            <section class="analyzer-card demographics-card">
+                <h2 class="card-title">Patient Demographics</h2>
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" value="0" placeholder="e.g., 52" min="18" max="120">
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <div class="radio-group">
+                        <input type="radio" id="gender-male" name="gender" value="1" checked>
+                        <label for="gender-male">Male</label>
+                        <input type="radio" id="gender-female" name="gender" value="0">
+                        <label for="gender-female">Female</label>
+                    </div>
+                </div>
+            </section>
+
+            <section class="analyzer-card vitals-card">
+                <h2 class="card-title">Vital Signs</h2>
+                <div class="form-group">
+                    <label for="heart-rate">Heart Rate (bpm)</label>
+                    <input type="number" id="heart-rate" value="0" placeholder="e.g., 61" min="30" max="200">
+                </div>
+                <div class="form-group">
+                    <label for="systolic-bp">Systolic BP (mmHg)</label>
+                    <input type="number" id="systolic-bp" value="0" placeholder="e.g., 112" min="60" max="250">
+                </div>
+                <div class="form-group">
+                    <label for="diastolic-bp">Diastolic BP (mmHg)</label>
+                    <input type="number" id="diastolic-bp" value="0" placeholder="e.g., 58" min="30" max="150">
+                </div>
+            </section>
+
+            <section class="analyzer-card labs-card">
+                <h2 class="card-title">Lab Results</h2>
+                <div class="form-group">
+                    <label for="blood-sugar">Blood Sugar (mg/dL)</label>
+                    <input type="number" id="blood-sugar" value="0" placeholder="e.g., 90" min="0" max="500">
+                </div>
+                <div class="form-group">
+                    <label for="ck-mb">CK-MB (ng/mL)</label>
+                    <input type="number" id="ck-mb" value="0" placeholder="e.g., 5" min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label for="troponin">Troponin (ng/mL)</label>
+                    <input type="number" id="troponin" value="0" placeholder="e.g., 0.04" step="0.01" min="0" max="10">
+                </div>
+            </section>
+
+            <button class="action-button primary-button">Analyze Risk</button>
+
+            <section class="analyzer-card result-card">
+                <h2 class="card-title">Prediction Result</h2>
+                <div class="result-display">
+                    <p id="prediction-result-text">Enter data and click 'Analyze Risk' to see the prediction.</p>
+                </div>
+            </section>
+
+            <button class="action-button secondary-button">Download Report</button>
+
+            <section class="analyzer-card full-report-card">
+                <h2 class="card-title">Full Report</h2>
+                <div class="result-display">
+                    <pre id="full-report-text">Detailed analysis will appear here after calculation.</pre>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="analyzer-footer">
+            <p>&copy; 2025 Vital Link. All Rights Reserved.</p>
+        </footer>
+
+    </div> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+    // Ensure jsPDF is available globally (it's often attached to window.jspdf or window.jsPDF)
+    const { jsPDF } = window.jspdf; 
+
+    const primaryButton = document.querySelector('.primary-button');
+    const secondaryButton = document.querySelector('.secondary-button');
+
+    // --- 1. Analysis Logic ---
+    primaryButton.addEventListener('click', () => {
+        document.getElementById('prediction-result-text').textContent = "Analyzing...";
+        
+        // Disable the button to prevent multiple submissions
+        primaryButton.disabled = true;
+
+        // Simulate analysis delay
+        setTimeout(() => {
+            const age = document.getElementById('age').value;
+            const genderLabel = document.querySelector('input[name="gender"]:checked').nextElementSibling.textContent;
+            const heartRate = document.getElementById('heart-rate').value;
+            const systolicBp = document.getElementById('systolic-bp').value;
+            const diastolicBp = document.getElementById('diastolic-bp').value;
+            const bloodSugar = document.getElementById('blood-sugar').value;
+            const ckMb = document.getElementById('ck-mb').value;
+            const troponin = document.getElementById('troponin').value;
+
+            // Simple dummy prediction for demonstration
+            let prediction = "Low Risk";
+            if (parseInt(age) > 60 || parseInt(heartRate) > 90) {
+                prediction = "Moderate Risk";
+            }
+            if (parseInt(age) > 75 && parseInt(heartRate) > 100) {
+                prediction = "High Risk - Consult a doctor immediately!";
+            }
+
+            // Update Prediction Display
+            document.getElementById('prediction-result-text').textContent = prediction;
+            
+            // Generate Full Report Text
+            const reportText = `
+VITAL LINK HEART ATTACK RISK ANALYSIS REPORT
+
+Analysis Date: ${new Date().toLocaleString()}
+Generated By: Vital Link Analyzer Tool
+---
+1. PATIENT DATA:
+Age: ${age}
+Gender: ${genderLabel}
+---
+2. VITAL SIGNS:
+Heart Rate: ${heartRate} bpm
+Systolic BP: ${systolicBp} mmHg
+Diastolic BP: ${diastolicBp} mmHg
+---
+3. LAB RESULTS:
+Blood Sugar: ${bloodSugar} mg/dL
+CK-MB: ${ckMb} ng/mL
+Troponin: ${troponin} ng/mL
+
+---
+FINAL PREDICTION: ${prediction.toUpperCase()}
+---
+Disclaimer: This tool is for informational purposes only and does not constitute medical advice. Please consult with a healthcare professional for any health concerns.
+            `;
+            document.getElementById('full-report-text').textContent = reportText;
+            
+            primaryButton.disabled = false; // Re-enable button
+            secondaryButton.style.display = 'block'; // Show download button
+        }, 1500);
+    });
+
+    // --- 2. Download Report Logic (PDF Generation) ---
+    secondaryButton.addEventListener('click', () => {
+        // Create a new jsPDF instance
+        const doc = new jsPDF();
+        
+        // Get the content to print (the plain text from the <pre> tag)
+        const reportContent = document.getElementById('full-report-text').textContent;
+        
+        // Set document title and metadata
+        const fileName = `VitalLink_RiskReport_${new Date().toISOString().slice(0, 10)}.pdf`;
+
+        // Add the text content to the PDF
+        // Parameters: text, x-coordinate, y-coordinate
+        doc.setFontSize(10);
+        
+        // Split the text into lines and add line by line for proper formatting
+        const lines = doc.splitTextToSize(reportContent, 180); // 180 is the max width in mm (A4 is ~210mm wide)
+        let y = 20; // Starting Y position
+
+        for (let i = 0; i < lines.length; i++) {
+            // Check if we need a new page
+            if (y > 280) { // A4 page height limit
+                doc.addPage();
+                y = 10; // Reset Y position for the new page
+            }
+            // Add text line
+            doc.text(lines[i], 15, y);
+            y += 7; // Increment Y for the next line (adjust 7 for line spacing)
+        }
+        
+        // Save the PDF
+        doc.save(fileName);
+    });
+    
+    // Initial setup: Hide the Download Report button until analysis is complete
+    secondaryButton.style.display = 'none';
+
+</script>
+
+</body>
+</html>

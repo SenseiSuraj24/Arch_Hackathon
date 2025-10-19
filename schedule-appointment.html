@@ -9,7 +9,226 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
+<style>
+  /* --- Global Variables and Base Styles --- */
+:root {
+    --primary-color: #007BFF; /* Main Action Blue */
+    --secondary-color: #0056b3; /* Darker Blue */
+    --background-color: #f4f7f9; /* Light, soft background */
+    --card-background: #ffffff; /* White card background */
+    --text-color: #333333;
+    --label-color: #6c757d;
+    --border-color: #e0e0e0;
+    --shadow-heavy: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* --- Layout Container --- */
+.main-content {
+    width: 100%;
+    max-width: 900px; /* Constrain width for desktop view */
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* --- Header --- */
+.dashboard-header {
+    width: 100%;
+    max-width: 600px;
+    text-align: left;
+    margin-bottom: 20px;
+    padding: 0 15px;
+}
+
+.dashboard-header h1 {
+    font-size: 2.2em;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+/* --- Appointment Card & Form Styling --- */
+.appointment-section {
+    width: 100%;
+    max-width: 600px; /* Set the max width for the form container */
+    margin: 20px 0;
+}
+
+.appointment-logo h2 {
+    font-size: 1.6em;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 15px;
+    padding: 0 15px;
+}
+
+.appointment-card {
+    background-color: var(--card-background);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: var(--shadow-heavy); /* Use a soft, pronounced shadow */
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--label-color);
+    margin-bottom: 8px;
+    font-size: 0.95em;
+}
+
+/* Styling for all input types and select/textarea */
+.form-group input:not([type="submit"]), 
+.form-group select, 
+.form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+    color: var(--text-color);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fdfdfd;
+}
+
+.form-group input:focus, 
+.form-group select:focus, 
+.form-group textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2); /* Subtle focus ring */
+    outline: none;
+    background-color: var(--card-background);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Ensure the date/time icons are correctly visible */
+.form-group input[type="date"],
+.form-group input[type="time"] {
+    position: relative;
+    /* Optional: Hide default text placeholder in date inputs */
+    color: var(--text-color);
+}
+
+/* --- Submit Button --- */
+.save-btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    letter-spacing: 0.5px;
+    margin-top: 15px;
+}
+
+.save-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+.save-btn:active {
+    transform: translateY(1px);
+}
+
+/* --- Confirmation Message Styling --- */
+.confirmation-box {
+    text-align: center;
+    background-color: #e9f7ef; /* Light green/success background */
+    border: 1px solid #d4edda;
+    color: #155724; /* Dark green text */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 150, 0, 0.1);
+    margin-top: 30px;
+}
+
+.confirmation-box h3 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.confirmation-box p {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+.confirmation-box strong {
+    color: var(--secondary-color);
+}
+
+/* --- Footer --- */
+.dashboard-footer {
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    padding: 20px 0 0;
+    color: var(--label-color);
+    font-size: 0.85em;
+    margin-top: auto; /* Push to the bottom */
+}
+
+/* --- Media Queries for Mobile Responsiveness --- */
+@media (max-width: 650px) {
+    .main-content {
+        padding: 10px;
+    }
+
+    .appointment-card {
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.8em;
+    }
+
+    .appointment-logo h2 {
+        font-size: 1.4em;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group input, 
+    .form-group select, 
+    .form-group textarea {
+        padding: 10px 12px;
+    }
+}
+</style>
 <body class="patient-dashboard">
 
   <!-- Main Content -->

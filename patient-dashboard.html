@@ -1,11 +1,252 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Health Dashboard - Vital Link</title>
-    <link rel="stylesheet" href="styles.css"> <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    </head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sidebar-width: 240px;
+            --sidebar-bg: #212431;
+            --sidebar-border: #313545;
+            --sidebar-text: #fff;
+            --sidebar-accent: #1953FF;
+            --primary-color: #007BFF;
+            --secondary-color: #0056b3;
+            --background-color: #f4f7f9;
+            --card-background: #ffffff;
+            --text-color: #333333;
+            --alert-color: #dc3545;
+            --info-color: #ffc107;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: color 0.3s;
+        }
+        a:hover { color: var(--secondary-color); }
+
+        /* --- Site Header & Main Navigation --- */
+        .site-header {
+            background-color: #000000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            position: relative; z-index: 100;
+        }
+        .logo img { height: 40px; }
+        .main-nav { display: flex; gap: 20px; }
+        .main-nav a {
+            color: white;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        .main-nav a:hover {
+            background-color: #343a40;
+            color: var(--primary-color);
+        }
+        .logout-btn {
+            background-color: var(--alert-color);
+            color: white !important;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 700;
+            transition: background-color 0.3s;
+        }
+        .logout-btn:hover { background-color: #35c5f9; }
+
+        /* Hamburger fixed top left */
+        .hamburger {
+            position: fixed;
+            left: 24px;
+            top: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            width: 32px;
+            height: 36px;
+            cursor: pointer;
+            z-index: 9999;
+            background: rgba(0,0,0,0.03);
+            border-radius: 8px;
+        }
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 4px;
+            margin: 5px 0;
+            background: whitesmoke;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* Sidebar menu */
+        .sidebar-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--sidebar-border);
+            color: var(--sidebar-text);
+            z-index: 10001;
+            box-shadow: 4px 0 24px rgba(20,24,49,0.16);
+            transform: translateX(-110%);
+            transition: transform 0.35s cubic-bezier(.6,-0.16,.46,1.23);
+            padding-top: 85px;
+        }
+        .sidebar-menu.active { transform: translateX(0); }
+
+        /* Overlay */
+        .menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(81, 81, 81, 0.36);
+            z-index: 10000;
+            transition: opacity 0.3s;
+        }
+        .menu-overlay.active { display: block; }
+        .sidebar-menu ul {
+            list-style: none; padding: 0; margin: 0;
+        }
+        .sidebar-menu li {
+            border-bottom: 1px solid #ffffff;
+        }
+        .sidebar-menu a {
+            color: whitesmoke;
+            font-size: 1.15em;
+            font-weight: 600;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            border-radius: 4px;
+            transition: background 0.21s, color 0.21s;
+        }
+        .sidebar-menu a:hover {
+            background: rgb(112, 186, 255);
+            color: #fff;
+        }
+        .sidebar-menu .icon {
+            margin-right: 16px;
+            font-size: 1.35em;
+        }
+        @media (max-width: 600px) {
+            .sidebar-menu { width: 90vw; padding-top: 70px; }
+        }
+
+        /* --- Dashboard Styles --- */
+        .dashboard-section {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 5%;
+        }
+        .dashboard-header {
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .dashboard-header h1 {
+            color: var(--secondary-color);
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+        .dashboard-header p { color: #6c757d; font-size: 1.1em; }
+        .dashboard-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .metric-card {
+            background-color:rgb(150, 229, 255);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-light);
+            border-left: 5px solid;
+        }
+        .metric-card h3 {
+            margin-top: 0;
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .metric-card p { margin-bottom: 15px; color: #5a6470; }
+        .metric-card.alert { border-left-color: var(--alert-color);}
+        .metric-card.info { border-left-color: var(--info-color);}
+        .metric-card a { font-weight: 600; font-size: 0.95em; display: inline-block; }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        .feature-card {
+            background-color: rgb(150, 229, 255);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: block;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .feature-card .icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: block;
+            width: fit-content;
+            padding: 10px;
+            border-radius: 50%;
+            background-color: rgba(0,123,255,0.1);
+        }
+        .feature-card h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+        .feature-card p { color: #6c757d; }
+        .feature-card.appointments .icon { background-color: rgba(0,123,255,0.1);}
+        .feature-card.records .icon { background-color: rgba(40,167,69,0.1);}
+        .feature-card.prescriptions .icon { background-color: rgba(255,193,7,0.1);}
+        .feature-card.profile .icon { background-color: rgba(23,162,184,0.1);}
+        .site-footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            border-top: 1px solid #5a5a5a;
+            background-color: #343a40;
+            color: #acacac;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            .main-nav { display: none; }
+        }
+    </style>
+</head>
 <body>
 
     <header class="site-header">
@@ -20,33 +261,28 @@
             <a href="index.html" class="logout-btn">Log Out</a>
         </nav>
     </header>
-<!-- Add this in your HTML just after <header>, before <main> -->
 
-<!-- Hamburger Menu Icon -->
-<div class="hamburger" id="hamburger-menu">
-    <span></span>
-    <span></span>
-    <span></span>
-</div>
-
-<!-- Sidebar Menu (hidden by default, slides in on click) -->
-<nav class="sidebar-menu" id="sidebar-menu">
-    <ul>
-        <li><a href="#"><span class="icon">🩺</span>Near By Doctor</a></li>
-        <li><a href="analyzer.html"><span class="icon">📊</span>Analyzer</a></li>
-        <li><a href="#"><span class="icon">🥦</span>NutriScan</a></li>
-        <li><a href="#"><span class="icon">⚙️</span>Settings</a></li>
-    </ul>
-</nav>
+    <!-- Hamburger and Sidebar/Overlay -->
+    <div class="hamburger" id="hamburger-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <nav class="sidebar-menu" id="sidebar-menu">
+        <ul>
+            <li><a href="#"><span class="icon">🩺</span>Near By Doctor</a></li>
+            <li><a href="analyzer.html"><span class="icon">📊</span>Analyzer</a></li>
+            <li><a href="#"><span class="icon">🥦</span>NutriScan</a></li>
+            <li><a href="#"><span class="icon">⚙️</span>Settings</a></li>
+        </ul>
+    </nav>
+    <div class="menu-overlay" id="menu-overlay"></div>
 
     <main class="dashboard-section">
         <div class="dashboard-header">
             <h1>Welcome Back, Patient Name!</h1>
             <p>Your centralized hub for managing your health with Vital Link.</p>
         </div>
-
-<!-- Sidebar Menu End -->
-
         <div class="dashboard-metrics">
             <div class="metric-card alert">
                 <h3>🔔 Alert: New Message</h3>
@@ -56,63 +292,50 @@
             <div class="metric-card info">
                 <h3>🗓 Next Appointment</h3>
                 <p>Cardiology Follow-up</p>
-                <p>Date: **Oct 25, 2025 at 10:00 AM**</p>
+                <p>Date: <strong>Oct 25, 2025 at 10:00 AM</strong></p>
                 <a href="#">Reschedule / Cancel →</a>
             </div>
         </div>
-
         <div class="dashboard-grid">
-            
             <a href="schedule-appointment.html" class="feature-card appointments">
                 <div class="icon">📅</div>
                 <h2>Schedule Appointment</h2>
                 <p>Book new visits with your primary care physician or specialists.</p>
             </a>
-            
             <a href="#" class="feature-card records">
                 <div class="icon">📄</div>
                 <h2>My Medical Records</h2>
                 <p>View test results, immunization history, and clinical notes.</p>
             </a>
-            
             <a href="#" class="feature-card prescriptions">
                 <div class="icon">💊</div>
                 <h2>Prescriptions</h2>
                 <p>Request refills and check the status of your current medications.</p>
             </a>
-            
             <a href="update-profile.html" class="feature-card profile">
-    <div class="icon">👤</div>
-    <h2>Update Profile</h2>
-    <p>Manage your contact details, insurance, and emergency contacts.</p>
-</a>
-
+                <div class="icon">👤</div>
+                <h2>Update Profile</h2>
+                <p>Manage your contact details, insurance, and emergency contacts.</p>
+            </a>
         </div>
     </main>
-
     <footer class="site-footer">
         <p>&copy; 2025 Vital Link. Your Health Portal.</p>
     </footer>
-<script>
-const hamburger = document.getElementById('hamburger-menu');
-const sidebar = document.getElementById('sidebar-menu');
-
-// Optional: for blackout overlay
-const menuOverlay = document.createElement('div');
-menuOverlay.classList.add('menu-overlay');
-document.body.appendChild(menuOverlay);
-
-hamburger.addEventListener('click', () => {
-    sidebar.classList.toggle('active');
-    menuOverlay.classList.toggle('active');
-});
-
-// Clicking overlay also closes sidebar
-menuOverlay.addEventListener('click', () => {
-    sidebar.classList.remove('active');
-    menuOverlay.classList.remove('active');
-});
-</script>
-
+    <script>
+        const hamburger = document.getElementById('hamburger-menu');
+        const sidebar = document.getElementById('sidebar-menu');
+        const overlay = document.getElementById('menu-overlay');
+        function openSidebar() {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+        }
+        function closeSidebar() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+        hamburger.onclick = openSidebar;
+        overlay.onclick = closeSidebar;
+    </script>
 </body>
 </html>
