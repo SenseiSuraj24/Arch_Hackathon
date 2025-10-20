@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to Vital Link </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #000000;
+      color: #202a44;
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .container {
+      max-width: 970px;
+      margin: 0 auto;
+      background: #81dbff;
+      border-radius: 14px;
+      box-shadow: 0 8px 38px rgba(70,110,160,0.09);
+      padding: 44px 26px 28px 26px;
+    }
+    
+    .logo-section {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .logo-section img {
+      height: 150px;
+      margin-bottom: 20px;
+    }
+    .header-title {
+      text-align: center;
+      font-size: 2.5em;
+      color: #05426e;
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 1.2em;
+      color: #1a86cf;
+      margin-bottom: 18px;
+    }
+
+    /* Vision & Mission Card Section */
+    .vision-mission-section {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin: 52px 0 22px 0;
+    }
+    .vision-mission-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 6px 28px rgba(70,110,160,0.14);
+      overflow: hidden;
+      width: 440px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .vision-mission-img {
+  width: 100%;
+  height: 270px;
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 8px 32px rgba(70,110,160,0.18);  /* Drop shadow added */
+  border-radius: 6px; /* Optional: slightly rounds corners for softness */
+}
+.vision-mission-img {
+  width: 100%;
+  height: 270px;
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 8px 32px rgba(70,110,160,0.18);
+  border-radius: 6px;
+  transition: transform 0.35s cubic-bezier(.19,1,.22,1);
+  /* Ensures smooth zoom effect on both enter and leave */
+}
+
+.vision-mission-img:hover {
+  transform: scale(0.95); /* Slightly zooms out (shrinks to 95%) */
+}
+
+    .vision-mission-img {
+      width: 100%;
+      height: 270px;
+      object-fit: cover;
+      display: block;
+    }
+    .vision-mission-text {
+      padding: 28px 26px 18px 26px;
+      text-align: left;
+    }
+    .card-title {
+      font-size: 1.43em;
+      color: #1a405e;
+      font-weight: 700;
+      text-align: left;
+      margin-bottom: 10px;
+    }
+    .card-desc {
+      color: #3a5982;
+      font-size: 1.13em;
+    }
+    @media (max-width: 970px) {
+      .container {
+        padding: 16px 8px;
+      }
+      .vision-mission-section {
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+      }
+      .vision-mission-card {
+        width: 95vw;
+        max-width: 420px;
+      }
+    }
+
+    /* Mission Block and About Content */
+    .mission-block {
+      background: #e7f3fd;
+      border-radius: 9px;
+      box-shadow: 0 4px 18px rgba(70,110,160,0.07);
+      padding: 20px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .mission-block h2 {
+      margin: 0 0 10px 0;
+      color: #1a86cf;
+      font-size: 1.13em;
+      font-weight: 700;
+    }
+    .mission-block p {
+      color: #05426e;
+      margin: 0;
+      font-size: 1.1em;
+    }
+    .about-content {
+      font-size: 1.13em;
+      color: #202a44;
+      margin-bottom: 18px;
+    }
+    
+    .footer {
+      background: #343a40;
+      color: #fff;
+      padding: 22px 0;
+      text-align: center;
+      margin-top: 48px;
+      border-radius: 0 0 14px 14px;
+      font-size: 1.04em;
+    }
+    @media (max-width: 800px) {
+      .container {
+        padding: 16px 8px;
+      }
+      .services-list {
+        columns: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-section">
+      <!-- Replace "logo.png" with your logo path -->
+      <img src="about_us.jpg" alt="Medax Hospitals Logo">
+    </div>
+    <h1 class="header-title">Welcome to Vital Link</h1>
+    <div class="subtitle">Your connection to everything about your body</div>
+    
+    <!-- Vision & Mission Cards -->
+    <div class="vision-mission-section">
+      <div class="vision-mission-card">
+        <img src="vision_image.jpg" alt="Vision Image" class="vision-mission-img">
+        <div class="vision-mission-text">
+          <div class="card-title">Our Vision</div>
+          <div class="card-desc">
+            We believe in 'Health forever' with Predictions, Accessiblity and Comfort
+          </div>
+        </div>
+      </div>
+      <div class="vision-mission-card">
+        <img src="mission_image.jpg" alt="Mission Image" class="vision-mission-img">
+        <div class="vision-mission-text">
+          <div class="card-title">Our Mission</div>
+          <div class="card-desc">
+            Accessible healthcare at your fingertips, from doctors, AI and other professionals.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mission Statement Block & About Info -->
+    <div class="mission-block">
+    <h2 style="font-family: 'Poppins', sans-serif; font-weight: 800; color: #05426e;">Key Objectives</h2>
+      <p>
+        We strive to become the vital link to your health at all times and requirements.
+      </p>
+    </div>
+    <div class="about-content">
+      Vital Link is made to offer a direct connection between you and your health. We provide connections to doctors, AI, fellow members in order to ensure you are always in touch with your health <br /><br />
+      We ensure quality checkups by top doctors, seamless integration of your data and predictive models to ensure your health is always perfect
+    </div>
+    <div class="footer">
+      &copy; 2025 Vital Link. All Rights Reserved. | Privacy Policy.
+    </div>
+  </div>
+</body>
+</html>

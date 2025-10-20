@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vital Link | Our Services</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 80px 20px;
+      animation: fadeInDown 1.2s ease;
+    }
+
+    header h1 {
+      font-size: 48px;
+      font-weight: 800;
+      color: #00e0ff;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      font-size: 18px;
+      color: #e0e0e0;
+      margin-top: 10px;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 50px 80px;
+      animation: fadeInUp 1.5s ease;
+    }
+
+    .service-card {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 15px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      transition: all 0.4s ease;
+      transform: translateY(0);
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px) scale(1.03);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 25px rgba(0, 224, 255, 0.4);
+    }
+
+    .service-card h3 {
+      color: #00e0ff;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .button-container {
+      text-align: center;
+      margin: 60px 0;
+      animation: fadeIn 1.5s ease;
+    }
+
+    .btn {
+      background: linear-gradient(90deg, #00e0ff, #4de1ff);
+      color: #0f2027;
+      border: none;
+      padding: 15px 35px;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 5px 20px rgba(0, 224, 255, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      background: #fff;
+      color: #0f2027;
+      box-shadow: 0 8px 30px rgba(255, 255, 255, 0.4);
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Our Services</h1>
+    <p>Empowering healthcare through intelligent, connected systems at <strong>Vital Link</strong>.</p>
+  </header>
+
+  <section class="services">
+    <div class="service-card">
+      <h3>AI Health Predictions</h3>
+      <p>Using federated learning to predict heart disease, diabetes, and more — securely.</p>
+    </div>
+    <div class="service-card">
+      <h3>Real-time Monitoring</h3>
+      <p>Integrating Google Fit & wearable data for personalized patient tracking.</p>
+    </div>
+    <div class="service-card">
+      <h3>Doctor Consultation</h3>
+      <p>Seamless online consultations with verified doctors across specialties.</p>
+    </div>
+    <div class="service-card">
+      <h3>Privacy-Preserving Insights</h3>
+      <p>Secure data collaboration between hospitals — without centralizing sensitive info.</p>
+    </div>
+  </section>
+
+  <div class="button-container">
+    <button class="btn" onclick="window.location.href='doctor_list.html'">View Our Doctors</button>
+  </div>
+</body>
+</html>
