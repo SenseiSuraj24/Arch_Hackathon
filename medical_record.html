@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Medical Records</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #e6f2ff, #ffffff);
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 20px 40px;
+      text-align: center;
+      font-size: 1.8em;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      color: #007bff;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .upload-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .upload-box {
+      background: #f0f8ff;
+      border: 2px dashed #007bff;
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .upload-box:hover {
+      background: #e7f3ff;
+      transform: scale(1.02);
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .records-list {
+      margin-top: 30px;
+    }
+
+    .record-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8faff;
+      border: 1px solid #dce9ff;
+      border-radius: 12px;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+      transition: 0.3s;
+    }
+
+    .record-card:hover {
+      transform: scale(1.01);
+    }
+
+    .record-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .record-info span {
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    .record-actions button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: 0.3s ease;
+      margin-left: 8px;
+    }
+
+    .record-actions button:hover {
+      background-color: #0056b3;
+    }
+
+    .no-records {
+      text-align: center;
+      color: #777;
+      font-style: italic;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>Patient Medical Records</header>
+
+  <div class="container">
+    <h2>Upload Your Reports & Prescriptions</h2>
+
+    <div class="upload-section">
+      <label class="upload-box">
+        📄 Click or Drag to Upload Medical Reports (PDF, Images)
+        <input type="file" class="file-input" id="reportUpload" multiple accept=".pdf,.jpg,.jpeg,.png">
+      </label>
+
+      <label class="upload-box">
+        💊 Click or Drag to Upload Prescription Images
+        <input type="file" class="file-input" id="prescriptionUpload" multiple accept=".jpg,.jpeg,.png">
+      </label>
+    </div>
+
+    <div class="records-list" id="recordsList">
+      <h3 style="margin-top: 30px; color:#007bff;">Your Uploaded Files</h3>
+      <div id="recordsContainer" class="records-container"></div>
+      <p id="noRecords" class="no-records">No files uploaded yet.</p>
+    </div>
+  </div>
+
+  <script>
+    const reportUpload = document.getElementById('reportUpload');
+    const prescriptionUpload = document.getElementById('prescriptionUpload');
+    const recordsContainer = document.getElementById('recordsContainer');
+    const noRecords = document.getElementById('noRecords');
+
+    let records = [];
+
+    function updateRecordsView() {
+      recordsContainer.innerHTML = '';
+      if (records.length === 0) {
+        noRecords.style.display = 'block';
+      } else {
+        noRecords.style.display = 'none';
+        records.forEach((record, index) => {
+          const card = document.createElement('div');
+          card.classList.add('record-card');
+
+          card.innerHTML = `
+            <div class="record-info">
+              <strong>${record.name}</strong>
+              <span>Type: ${record.type}</span>
+            </div>
+            <div class="record-actions">
+              <button onclick="viewRecord(${index})">View</button>
+              <button onclick="deleteRecord(${index})">Delete</button>
+            </div>
+          `;
+          recordsContainer.appendChild(card);
+        });
+      }
+    }
+
+    function handleFileUpload(files, type) {
+      for (let file of files) {
+        const record = {
+          name: file.name,
+          type: type,
+          url: URL.createObjectURL(file)
+        };
+        records.push(record);
+      }
+      updateRecordsView();
+    }
+
+    reportUpload.addEventListener('change', (e) => handleFileUpload(e.target.files, 'Report'));
+    prescriptionUpload.addEventListener('change', (e) => handleFileUpload(e.target.files, 'Prescription'));
+
+    function deleteRecord(index) {
+      records.splice(index, 1);
+      updateRecordsView();
+    }
+
+    function viewRecord(index) {
+      window.open(records[index].url, '_blank');
+    }
+  </script>
+</body>
+</html>
