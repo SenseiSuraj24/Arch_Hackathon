@@ -4,372 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Heart Attack Risk Analyzer | Vital Link</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            background: #e3f2fd;
-            color: #0d47a1;
-            min-height: 100vh;
-            padding-top: 80px;
-        }
-
-        /* --- Site Header & Navigation --- */
-        .site-header {
-            background-color: #0d47a1;
-            box-shadow: 0 2px 4px rgba(13, 71, 161, 0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-        }
-        
-        .logo img { 
-            height: 45px; 
-            width: auto;
-            object-fit: contain;
-        }
-        
-        .main-nav { 
-            display: flex; 
-            gap: 20px; 
-        }
-        
-        .main-nav a {
-            color: white;
-            font-weight: 600;
-            padding: 8px 16px;
-            border-radius: 20px;
-            transition: all 0.3s;
-        }
-        
-        .main-nav a:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-        }
-        
-        .logout-btn {
-            background-color: #64b5f6;
-            color: white !important;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 700;
-            transition: all 0.3s;
-        }
-        
-        .logout-btn:hover { 
-            background-color: #0a3a8a;
-            transform: translateY(-2px);
-        }
-
-        .analyzer-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .analyzer-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 30px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 5px 15px rgba(13, 71, 161, 0.1);
-            border: 1px solid #e3f2fd;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .analyzer-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: #64b5f6;
-        }
-
-        .logo-title {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-
-        .logo-title .icon {
-            font-size: 2.5em;
-            color: #ff416c;
-        }
-
-        .analyzer-header h1 {
-            color: #0d47a1;
-            font-size: 2.5em;
-            font-weight: 700;
-        }
-
-        .analyzer-header p {
-            color: #0d47a1;
-            font-size: 1.1em;
-            opacity: 0.8;
-        }
-
-        .analyzer-main {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        .analyzer-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(13, 71, 161, 0.1);
-            border: 1px solid #e3f2fd;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .analyzer-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: #64b5f6;
-        }
-
-        .card-title {
-            color: #0d47a1;
-            font-size: 1.5em;
-            font-weight: 600;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #e3f2fd;
-            padding-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            color: #0d47a1;
-            margin-bottom: 8px;
-            font-size: 0.95em;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e3f2fd;
-            border-radius: 10px;
-            font-size: 1em;
-            color: #0d47a1;
-            transition: all 0.3s ease;
-            background: #f5fbff;
-        }
-
-        .form-group input:focus {
-            border-color: #64b5f6;
-            box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2);
-            outline: none;
-            background: white;
-        }
-
-        .radio-group {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .radio-group input[type="radio"] {
-            display: none;
-        }
-
-        .radio-group label {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #f5fbff;
-            border: 2px solid #e3f2fd;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .radio-group input[type="radio"]:checked + label {
-            background: #0d47a1;
-            color: white;
-            border-color: #0d47a1;
-        }
-
-        .radio-group label:hover {
-            border-color: #64b5f6;
-            transform: translateY(-2px);
-        }
-
-        .action-button {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            box-shadow: 0 5px 15px rgba(13, 71, 161, 0.3);
-        }
-
-        .primary-button {
-            background: #0d47a1;
-            color: white;
-        }
-
-        .primary-button:hover {
-            background: #64b5f6;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(13, 71, 161, 0.4);
-        }
-
-        .secondary-button {
-            background: #00b09b;
-            color: white;
-        }
-
-        .secondary-button:hover {
-            background: #009c82;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 176, 155, 0.4);
-        }
-
-        .result-display {
-            background: #f5fbff;
-            border: 1px solid #e3f2fd;
-            border-radius: 10px;
-            padding: 20px;
-            min-height: 100px;
-        }
-
-        #prediction-result-text {
-            color: #0d47a1;
-            font-size: 1.2em;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        #full-report-text {
-            color: #0d47a1;
-            font-family: 'Courier New', monospace;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            font-size: 0.9em;
-        }
-
-        .analyzer-footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-            color: #0d47a1;
-            font-size: 0.9em;
-            border-top: 1px solid #e3f2fd;
-        }
-
-        @media (max-width: 768px) {
-            .main-nav { 
-                display: none; 
-            }
-            
-            .analyzer-container {
-                padding: 15px;
-            }
-            
-            .analyzer-header {
-                padding: 20px;
-            }
-            
-            .analyzer-header h1 {
-                font-size: 2em;
-            }
-            
-            .analyzer-card {
-                padding: 20px;
-            }
-            
-            .radio-group {
-                flex-direction: column;
-                gap: 10px;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"> 
 </head>
-<body>
-
-    <!-- Site Header with Navigation -->
-    <header class="site-header">
-        <div class="logo">
-            <img src="vital-link-logo.png" alt="Vital Link Logo">
-        </div>
-        <nav class="main-nav">
-            <a href="patient-dashboard.html">Dashboard</a>
-            <a href="billing.html">Bills</a>
-            <a href="index.html" class="logout-btn">Log Out</a>
-        </nav>
-    </header>
+<body class="analyzer-page">
 
     <div class="analyzer-container">
 
         <header class="analyzer-header">
             <div class="logo-title">
-                <span class="icon"><i class="fas fa-heartbeat"></i></span> 
+                <span class="icon">❤</span> 
                 <h1>Heart Attack Risk Analyzer</h1>
             </div>
-            <p>AI-powered assessment of cardiovascular health risks</p>
+            <div class="user-actions">
+                </div>
         </header>
 
-        <main class="analyzer-main">
+        <main class="analyzer-main"> 
 
             <section class="analyzer-card settings-card">
-                <h2 class="card-title"><i class="fas fa-cog"></i> General Settings</h2>
+                <h2 class="card-title">General Settings</h2>
                 <div class="form-group">
                     <label>Choose Language</label>
                     <div class="radio-group">
                         <input type="radio" id="lang-english" name="language" value="english" checked>
                         <label for="lang-english">English</label>
+                        
                     </div>
                 </div>
             </section>
 
             <section class="analyzer-card demographics-card">
-                <h2 class="card-title"><i class="fas fa-user-friends"></i> Patient Demographics</h2>
+                <h2 class="card-title">Patient Demographics</h2>
                 <div class="form-group">
-                    <label for="age"><i class="fas fa-birthday-cake"></i> Age</label>
+                    <label for="age">Age</label>
                     <input type="number" id="age" value="0" placeholder="e.g., 52" min="18" max="120">
                 </div>
                 <div class="form-group">
-                    <label><i class="fas fa-venus-mars"></i> Gender</label>
+                    <label>Gender</label>
                     <div class="radio-group">
                         <input type="radio" id="gender-male" name="gender" value="1" checked>
                         <label for="gender-male">Male</label>
@@ -380,10 +52,171 @@
             </section>
 
             <section class="analyzer-card vitals-card">
-                <h2 class="card-title"><i class="fas fa-heart"></i> Vital Signs</h2>
+                <h2 class="card-title">Vital Signs</h2>
                 <div class="form-group">
-                    <label for="heart-rate"><i class="fas fa-heartbeat"></i> Heart Rate (bpm)</label>
+                    <label for="heart-rate">Heart Rate (bpm)</label>
                     <input type="number" id="heart-rate" value="0" placeholder="e.g., 61" min="30" max="200">
                 </div>
                 <div class="form-group">
-                    <label for="systolic-bp"><i class="fas fa-tach
+                    <label for="systolic-bp">Systolic BP (mmHg)</label>
+                    <input type="number" id="systolic-bp" value="0" placeholder="e.g., 112" min="60" max="250">
+                </div>
+                <div class="form-group">
+                    <label for="diastolic-bp">Diastolic BP (mmHg)</label>
+                    <input type="number" id="diastolic-bp" value="0" placeholder="e.g., 58" min="30" max="150">
+                </div>
+            </section>
+
+            <section class="analyzer-card labs-card">
+                <h2 class="card-title">Lab Results</h2>
+                <div class="form-group">
+                    <label for="blood-sugar">Blood Sugar (mg/dL)</label>
+                    <input type="number" id="blood-sugar" value="0" placeholder="e.g., 90" min="0" max="500">
+                </div>
+                <div class="form-group">
+                    <label for="ck-mb">CK-MB (ng/mL)</label>
+                    <input type="number" id="ck-mb" value="0" placeholder="e.g., 5" min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label for="troponin">Troponin (ng/mL)</label>
+                    <input type="number" id="troponin" value="0" placeholder="e.g., 0.04" step="0.01" min="0" max="10">
+                </div>
+            </section>
+
+            <button class="action-button primary-button">Analyze Risk</button>
+
+            <section class="analyzer-card result-card">
+                <h2 class="card-title">Prediction Result</h2>
+                <div class="result-display">
+                    <p id="prediction-result-text">Enter data and click 'Analyze Risk' to see the prediction.</p>
+                </div>
+            </section>
+
+            <button class="action-button secondary-button">Download Report</button>
+
+            <section class="analyzer-card full-report-card">
+                <h2 class="card-title">Full Report</h2>
+                <div class="result-display">
+                    <pre id="full-report-text">Detailed analysis will appear here after calculation.</pre>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="analyzer-footer">
+            <p>&copy; 2025 Vital Link. All Rights Reserved.</p>
+        </footer>
+
+    </div> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+    // Ensure jsPDF is available globally (it's often attached to window.jspdf or window.jsPDF)
+    const { jsPDF } = window.jspdf; 
+
+    const primaryButton = document.querySelector('.primary-button');
+    const secondaryButton = document.querySelector('.secondary-button');
+
+    // --- 1. Analysis Logic ---
+    primaryButton.addEventListener('click', () => {
+        document.getElementById('prediction-result-text').textContent = "Analyzing...";
+        
+        // Disable the button to prevent multiple submissions
+        primaryButton.disabled = true;
+
+        // Simulate analysis delay
+        setTimeout(() => {
+            const age = document.getElementById('age').value;
+            const genderLabel = document.querySelector('input[name="gender"]:checked').nextElementSibling.textContent;
+            const heartRate = document.getElementById('heart-rate').value;
+            const systolicBp = document.getElementById('systolic-bp').value;
+            const diastolicBp = document.getElementById('diastolic-bp').value;
+            const bloodSugar = document.getElementById('blood-sugar').value;
+            const ckMb = document.getElementById('ck-mb').value;
+            const troponin = document.getElementById('troponin').value;
+
+            // Simple dummy prediction for demonstration
+            let prediction = "Low Risk";
+            if (parseInt(age) > 60 || parseInt(heartRate) > 90) {
+                prediction = "Moderate Risk";
+            }
+            if (parseInt(age) > 75 && parseInt(heartRate) > 100) {
+                prediction = "High Risk - Consult a doctor immediately!";
+            }
+
+            // Update Prediction Display
+            document.getElementById('prediction-result-text').textContent = prediction;
+            
+            // Generate Full Report Text
+            const reportText = `
+VITAL LINK HEART ATTACK RISK ANALYSIS REPORT
+
+Analysis Date: ${new Date().toLocaleString()}
+Generated By: Vital Link Analyzer Tool
+---
+1. PATIENT DATA:
+Age: ${age}
+Gender: ${genderLabel}
+---
+2. VITAL SIGNS:
+Heart Rate: ${heartRate} bpm
+Systolic BP: ${systolicBp} mmHg
+Diastolic BP: ${diastolicBp} mmHg
+---
+3. LAB RESULTS:
+Blood Sugar: ${bloodSugar} mg/dL
+CK-MB: ${ckMb} ng/mL
+Troponin: ${troponin} ng/mL
+
+---
+FINAL PREDICTION: ${prediction.toUpperCase()}
+---
+Disclaimer: This tool is for informational purposes only and does not constitute medical advice. Please consult with a healthcare professional for any health concerns.
+            `;
+            document.getElementById('full-report-text').textContent = reportText;
+            
+            primaryButton.disabled = false; // Re-enable button
+            secondaryButton.style.display = 'block'; // Show download button
+        }, 1500);
+    });
+
+    // --- 2. Download Report Logic (PDF Generation) ---
+    secondaryButton.addEventListener('click', () => {
+        // Create a new jsPDF instance
+        const doc = new jsPDF();
+        
+        // Get the content to print (the plain text from the <pre> tag)
+        const reportContent = document.getElementById('full-report-text').textContent;
+        
+        // Set document title and metadata
+        const fileName = VitalLink_RiskReport_${new Date().toISOString().slice(0, 10)}.pdf;
+
+        // Add the text content to the PDF
+        // Parameters: text, x-coordinate, y-coordinate
+        doc.setFontSize(10);
+        
+        // Split the text into lines and add line by line for proper formatting
+        const lines = doc.splitTextToSize(reportContent, 180); // 180 is the max width in mm (A4 is ~210mm wide)
+        let y = 20; // Starting Y position
+
+        for (let i = 0; i < lines.length; i++) {
+            // Check if we need a new page
+            if (y > 280) { // A4 page height limit
+                doc.addPage();
+                y = 10; // Reset Y position for the new page
+            }
+            // Add text line
+            doc.text(lines[i], 15, y);
+            y += 7; // Increment Y for the next line (adjust 7 for line spacing)
+        }
+        
+        // Save the PDF
+        doc.save(fileName);
+    });
+    
+    // Initial setup: Hide the Download Report button until analysis is complete
+    secondaryButton.style.display = 'none';
+
+</script>
+
+</body>
+</html>
