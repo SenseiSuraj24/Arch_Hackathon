@@ -12,7 +12,17 @@
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
   
   /* Body */
-  body{display:flex;min-height:100vh;background:#e0f7fa;color:#007c91;overflow-x:hidden;transition:0.5s}
+  /* add top padding so fixed topbar doesn't overlap content */
+  body{display:flex;min-height:100vh;background:#e0f7fa;color:#007c91;overflow-x:hidden;transition:0.5s;padding-top:70px}
+
+  /* Top fixed navigation bar */
+  .topbar{position:fixed;top:0;left:0;right:0;height:70px;background:rgba(41, 150, 150, 0.95);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:space-between;padding:0 30px;z-index:1000;box-shadow:0 2px 12px rgba(0,140,180,0.18)}
+  .topbar .logo{color:#fff;font-weight:800;font-size:1.4rem;letter-spacing:1px}
+  /* logo image sizing (replace text with an <img> below) */
+  .topbar .logo img{height:48px;display:block}
+  .topbar nav{display:flex;align-items:center}
+  .topbar nav a{color:#ffffff;text-decoration:none;margin-left:22px;font-weight:600;transition:0.2s}
+  .topbar nav a:hover{text-decoration:underline;opacity:0.95}
 
   /* Sidebar */
   .sidebar{width:250px;background:rgba(0,140,180,0.85);backdrop-filter:blur(12px);padding:30px 0;display:flex;flex-direction:column;align-items:center;box-shadow:4px 0 20px rgba(0,140,180,0.25);transition:0.5s;border-radius:0 20px 20px 0;}
@@ -59,8 +69,18 @@
 </head>
 <body>
 
+<!-- Top navigation bar added; links point to example pages (create these files or update hrefs) -->
+<div class="topbar">
+  <div class="logo">
+    <!-- save the provided PNG next to this HTML file as "vital-link.png" or update the src path -->
+    <img src="vital-link-logo.png" alt="Vital Link logo">
+  </div>
+  <nav>
+    <a href="index.html">LOGOUT</a>
+  </nav>
+</div>
+
 <aside class="sidebar">
-  <h2>Vital Link</h2>
   <ul>
     <li data-page="dashboard" class="active"><i class="fas fa-user-md"></i> Dashboard</li>
     <li data-page="appointments"><i class="fas fa-calendar-check"></i> Appointments</li>
@@ -93,10 +113,10 @@
   const doctorData={
     name:"Dr. Aisha Kapoor",
     dashboard:{totalPatients:248,appointmentsToday:18,icuPatients:4,pendingReports:6,messages:12,surgeriesScheduled:2},
-    appointments:[{patient:"John Doe",time:"10:00 AM",type:"Consultation"},{patient:"Mary Jane",time:"11:30 AM",type:"Follow-up"}],
-    icu:[{patient:"James Smith",condition:"Critical"},{patient:"Linda Brown",condition:"Stable"}],
-    patients:[{name:"John Doe",age:45,condition:"Flu"},{name:"Mary Jane",age:30,condition:"Check-up"},{name:"James Smith",age:60,condition:"Heart Surgery"}],
-    prescriptions:[{patient:"John Doe",medication:"Medicine A",dosage:"2x/day"},{patient:"Mary Jane",medication:"Medicine B",dosage:"1x/day"}],
+    appointments:[{patient:"Jawahar Singh",time:"10:00 AM",type:"Consultation"},{patient:"Sita Polisetty",time:"11:30 AM",type:"Follow-up"}],
+    icu:[{patient:"Asma Khan",condition:"Critical"},{patient:"Sita Pollisetty",condition:"Stable"}],
+    patients:[{name:"Jawahar Singh",age:45,condition:"Flu"},{name:"Dhruv Chandra",age:30,condition:"Check-up"},{name:"Ramaswamy Iyengar",age:60,condition:"Heart Surgery"}],
+    prescriptions:[{patient:"Jawahar Singh",medication:"Medicine A",dosage:"2x/day"},{patient:"Supreet Chetty",medication:"Medicine B",dosage:"1x/day"}],
     settings:{theme:"Light",notifications:true}
   };
 
@@ -112,8 +132,8 @@
 
   function loadPage(page){
     contentDiv.innerHTML="";
-    document.querySelectorAll('.sidebar ul li').forEach(li=>li.classList.remove('active'));
-    document.querySelector(`.sidebar ul li[data-page="${page}"]`).classList.add('active');
+  document.querySelectorAll('.sidebar ul li').forEach(li=>li.classList.remove('active'));
+  document.querySelector(`.sidebar ul li[data-page="${page}"]`).classList.add('active');
 
     if(page==='dashboard'){
       const d=doctorData.dashboard;
@@ -133,12 +153,13 @@
       let items=doctorData[page]||[];
       if(items.length>0){
         let headers=Object.keys(items[0]);
-        let html=`<h2>${page.charAt(0).toUpperCase()+page.slice(1)}</h2><table><tr>`;
-        headers.forEach(h=>html+=`<th>${h.charAt(0).toUpperCase()+h.slice(1)}</th>`); html+="</tr>";
-        items.forEach(obj=>{html+="<tr>"; headers.forEach(h=>html+=`<td>${obj[h]}</td>`); html+="</tr>";});
-        html+="</table>"; contentDiv.innerHTML=html;
+        let html = `<h2>${page.charAt(0).toUpperCase()+page.slice(1)}</h2><table><tr>`;
+        headers.forEach(h => html += `<th>${h.charAt(0).toUpperCase()+h.slice(1)}</th>`);
+        html += "</tr>";
+        items.forEach(obj => { html += "<tr>"; headers.forEach(h => html += `<td>${obj[h]}</td>`); html += "</tr>"; });
+        html += "</table>"; contentDiv.innerHTML = html;
       } else {
-        contentDiv.innerHTML=`<h2>${page.charAt(0).toUpperCase()+page.slice(1)}</h2><p>No data available</p>`;
+        contentDiv.innerHTML = `<h2>${page.charAt(0).toUpperCase()+page.slice(1)}</h2><p>No data available</p>`;
       }
     }
   }
