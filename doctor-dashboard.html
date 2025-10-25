@@ -65,6 +65,14 @@
 
   /* Responsive */
   @media(max-width:900px){body{flex-direction:column}.sidebar{width:100%;flex-direction:row;justify-content:space-around;border-radius:0}.main-content{padding:20px;border-radius:0}}
+
+  /* Message box styles (used only on All Patients page) */
+  .msg-box{display:flex;gap:8px;align-items:center}
+  .msg-box .msg-ui{display:flex;gap:8px;align-items:center}
+  .msg-box input.msg-input{padding:8px;border-radius:8px;border:1px solid #cfeff3;min-width:180px;background:#fff;color:#007c91}
+  .msg-box button.msg-toggle{padding:8px 10px;border-radius:8px;border:none;background:#00acc1;color:#fff;cursor:pointer}
+  .msg-box button.msg-send{padding:8px 10px;border-radius:8px;border:none;background:#007c91;color:#fff;cursor:pointer}
+  .msg-small{font-size:0.85rem;color:#006a73;margin-left:8px}
 </style>
 </head>
 <body>
@@ -115,10 +123,13 @@
     dashboard:{totalPatients:248,appointmentsToday:18,icuPatients:4,pendingReports:6,messages:12,surgeriesScheduled:2},
     appointments:[{patient:"Jawahar Singh",time:"10:00 AM",type:"Consultation"},{patient:"Sita Polisetty",time:"11:30 AM",type:"Follow-up"}],
     icu:[{patient:"Asma Khan",condition:"Critical"},{patient:"Sita Pollisetty",condition:"Stable"}],
-    patients:[{name:"Jawahar Singh",age:45,condition:"Flu"},{name:"Dhruv Chandra",age:30,condition:"Check-up"},{name:"Ramaswamy Iyengar",age:60,condition:"Heart Surgery"}],
+    patients:[{name:"Jawahar Singh",age:45,condition:"Flu"},{name:"Dhruv Chandra",age:30,condition:"Check-up"},{name:"Ramaswamy Iyengar",age:60,condition:"Heart Surgery"},{name:"Sita Pollisetty",age:30,condition:"Tonsilitis"}],
     prescriptions:[{patient:"Jawahar Singh",medication:"Medicine A",dosage:"2x/day"},{patient:"Supreet Chetty",medication:"Medicine B",dosage:"1x/day"}],
     settings:{theme:"Light",notifications:true}
   };
+
+  // store sent messages (in-memory)
+  const messagesLog = [];
 
   const words=["Compassion","Precision","Care","Health","Wellness"];
   let i=0;
@@ -150,16 +161,68 @@
       revealCards();
     }
     else{
-      let items=doctorData[page]||[];
-      if(items.length>0){
-        let headers=Object.keys(items[0]);
-        let html = `<h2>${page.charAt(0).toUpperCase()+page.slice(1)}</h2><table><tr>`;
-        headers.forEach(h => html += `<th>${h.charAt(0).toUpperCase()+h.slice(1)}</th>`);
-        html += "</tr>";
-        items.forEach(obj => { html += "<tr>"; headers.forEach(h => html += `<td>${obj[h]}</td>`); html += "</tr>"; });
-        html += "</table>"; contentDiv.innerHTML = html;
+      // Special rendering for patients: include a message box next to each patient
+      if(page === 'patients'){
+        const items = doctorData.patients || [];
+        let html = `<h2>All Patients</h2><table><tr><th>Name</th><th>Age</th><th>Condition</th><th>Message</th></tr>`;
+        items.forEach((p, idx) => {
+          html += `<tr>
+            <td>${p.name}</td>
+            <td>${p.age ?? ''}</td>
+            <td>${p.condition ?? ''}</td>
+            <td>
+              <div class="msg-box" data-index="${idx}">
+                <button class="msg-toggle">Message</button>
+                <div class="msg-ui" style="display:none;">
+                  <input type="text" class="msg-input" placeholder="Type a message to ${p.name}">
+                  <button class="msg-send">Send</button>
+                  <span class="msg-small"></span>
+                </div>
+              </div>
+            </td>
+          </tr>`;
+        });
+        html += `</table>`;
+        contentDiv.innerHTML = html;
+
+        // Attach interactions for message UI
+        contentDiv.querySelectorAll('.msg-toggle').forEach(btn=>{
+          btn.addEventListener('click', ()=> {
+            const ui = btn.parentElement.querySelector('.msg-ui');
+            ui.style.display = ui.style.display === 'none' ? 'flex' : 'none';
+            const input = ui.querySelector('.msg-input');
+            if(ui.style.display === 'flex') input.focus();
+          });
+        });
+
+        contentDiv.querySelectorAll('.msg-send').forEach(btn=>{
+          btn.addEventListener('click', ()=> {
+            const box = btn.closest('.msg-box');
+            const idx = box.dataset.index;
+            const input = box.querySelector('.msg-input');
+            const text = (input.value || '').trim();
+            const feedback = box.querySelector('.msg-small');
+            if(!text) { feedback.textContent = 'Enter a message'; setTimeout(()=>feedback.textContent='',1500); return; }
+            messagesLog.push({to: doctorData.patients[idx].name, message: text, time: new Date().toISOString()});
+            feedback.textContent = 'Sent';
+            input.value = '';
+            setTimeout(()=>feedback.textContent = '', 2000);
+            // Optional: you can console.log or send to server here
+            console.log('Message sent ->', messagesLog[messagesLog.length-1]);
+          });
+        });
       } else {
-        contentDiv.innerHTML = `<h2>${page.charAt(0).toUpperCase()+page.slice(1)}</h2><p>No data available</p>`;
+        let items=doctorData[page]||[];
+        if(items.length>0){
+          let headers=Object.keys(items[0]);
+          let html = `<h2>${page.charAt(0).toUpperCase()+page.slice(1)}</h2><table><tr>`;
+          headers.forEach(h => html += `<th>${h.charAt(0).toUpperCase()+h.slice(1)}</th>`);
+          html += "</tr>";
+          items.forEach(obj => { html += "<tr>"; headers.forEach(h => html += `<td>${obj[h]}</td>`); html += "</tr>"; });
+          html += "</table>"; contentDiv.innerHTML = html;
+        } else {
+          contentDiv.innerHTML = `<h2>${page.charAt(0).toUpperCase()+page.slice(1)}</h2><p>No data available</p>`;
+        }
       }
     }
   }
