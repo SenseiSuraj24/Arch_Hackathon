@@ -4,98 +4,505 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Doctor Dashboard | Vital Link</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://unpkg.com/scrollreveal"></script>
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
   
   /* Body */
-  /* add top padding so fixed topbar doesn't overlap content */
-  body{display:flex;min-height:100vh;background:#e0f7fa;color:#007c91;overflow-x:hidden;transition:0.5s;padding-top:70px}
+  body {
+    display: flex;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e3f2fd 0%, #f5fbff 100%);
+    color: #0d47a1;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 80px;
+  }
 
   /* Top fixed navigation bar */
-  .topbar{position:fixed;top:0;left:0;right:0;height:70px;background:rgba(41, 150, 150, 0.95);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:space-between;padding:0 30px;z-index:1000;box-shadow:0 2px 12px rgba(0,140,180,0.18)}
-  .topbar .logo{color:#fff;font-weight:800;font-size:1.4rem;letter-spacing:1px}
-  /* logo image sizing (replace text with an <img> below) */
-  .topbar .logo img{height:48px;display:block}
-  .topbar nav{display:flex;align-items:center}
-  .topbar nav a{color:#ffffff;text-decoration:none;margin-left:22px;font-weight:600;transition:0.2s}
-  .topbar nav a:hover{text-decoration:underline;opacity:0.95}
+  .topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: #0d47a1;
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(13, 71, 161, 0.2);
+  }
+  
+  .topbar .logo {
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .topbar .logo img {
+  height: 45px;
+  width: auto;
+  object-fit: contain;
+}
+  
+  .topbar .logo i {
+    font-size: 1.8rem;
+    color: #64b5f6;
+  }
+  
+  .topbar nav {
+    display: flex;
+    align-items: center;
+  }
+  
+  .topbar nav a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-left: 25px;
+    font-weight: 600;
+    transition: 0.3s;
+    padding: 8px 16px;
+    border-radius: 20px;
+  }
+  
+  .topbar nav a:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+  }
 
   /* Sidebar */
-  .sidebar{width:250px;background:rgba(0,140,180,0.85);backdrop-filter:blur(12px);padding:30px 0;display:flex;flex-direction:column;align-items:center;box-shadow:4px 0 20px rgba(0,140,180,0.25);transition:0.5s;border-radius:0 20px 20px 0;}
-  .sidebar h2{font-size:2rem;color:#ffffff;margin-bottom:50px;text-shadow:0 0 10px rgba(0,255,255,0.4);letter-spacing:1px}
-  .sidebar ul{list-style:none;width:100%}
-  .sidebar ul li{width:100%;padding:18px 30px;display:flex;align-items:center;color:#d0f0f8;cursor:pointer;transition:0.4s;border-radius:12px;margin-bottom:8px}
-  .sidebar ul li:hover, .sidebar ul li.active{background:linear-gradient(90deg,#00bcd4,#00acc1);color:#fff;transform:scale(1.05)}
-  .sidebar ul li i{margin-right:15px;font-size:1.3rem;transition:0.3s}
+  .sidebar {
+    width: 280px;
+    background: #0d47a1;
+    padding: 40px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 4px 0 20px rgba(13, 71, 161, 0.25);
+    transition: 0.5s;
+    border-radius: 0 30px 30px 0;
+  }
+  
+  .sidebar h2 {
+    font-size: 1.8rem;
+    color: #ffffff;
+    margin-bottom: 50px;
+    letter-spacing: 1px;
+    text-align: center;
+    padding: 0 20px;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    width: 100%;
+  }
+  
+  .sidebar ul li {
+    width: 100%;
+    padding: 18px 30px;
+    display: flex;
+    align-items: center;
+    color: #e3f2fd;
+    cursor: pointer;
+    transition: 0.4s;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  
+  .sidebar ul li:hover, .sidebar ul li.active {
+    background: #64b5f6;
+    color: #fff;
+    transform: translateX(8px);
+    box-shadow: 0 5px 15px rgba(13, 71, 161, 0.3);
+  }
+  
+  .sidebar ul li i {
+    margin-right: 15px;
+    font-size: 1.3rem;
+    transition: 0.3s;
+    width: 24px;
+    text-align: center;
+  }
 
   /* Main Content */
-  .main-content{flex:1;padding:40px 60px;background:#f0faff;overflow-x:hidden;transition:0.5s;border-radius:20px 0 0 20px;box-shadow:0 0 25px rgba(0,0,0,0.05)}
-  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;flex-wrap:wrap}
-  header h1{font-size:2.2rem;font-weight:800;color:#007c91;text-shadow:0 0 8px rgba(0,140,180,0.4)}
-  header p{font-size:1.1rem;color:#005662;margin-top:8px}
+  .main-content {
+    flex: 1;
+    padding: 40px 60px;
+    background: #ffffff;
+    overflow-x: hidden;
+    transition: 0.5s;
+    border-radius: 30px 0 0 30px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e3f2fd;
+  }
+  
+  header h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #0d47a1;
+    margin-bottom: 8px;
+  }
+  
+  header p {
+    font-size: 1.1rem;
+    color: #0d47a1;
+    margin-top: 8px;
+  }
+  
+  .date-display {
+    background: #e3f2fd;
+    padding: 12px 20px;
+    border-radius: 15px;
+    font-weight: 600;
+    color: #0d47a1;
+    box-shadow: 0 4px 10px rgba(13, 71, 161, 0.1);
+  }
 
   /* Dashboard Cards */
-  .dashboard-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;margin-bottom:50px}
-  .card{background:#ffffff;border-radius:20px;padding:25px;text-align:center;box-shadow:0 5px 25px rgba(0,140,180,0.2);transition:0.5s;position:relative;cursor:pointer}
-  .card:hover{transform:translateY(-8px);box-shadow:0 10px 30px rgba(0,140,180,0.3)}
-  .card h3{font-size:1.3rem;color:#007c91;margin-bottom:10px;font-weight:600}
-  .card h1{font-size:2.6rem;color:#00acc1;font-weight:800;margin-bottom:5px}
-  .card p{font-size:0.95rem;color:#007c91}
+  .dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+  }
+  
+  .card {
+    background: linear-gradient(135deg, #ffffff 0%, #f5fbff 100%);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(13, 71, 161, 0.1);
+    transition: 0.5s;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid #e3f2fd;
+    overflow: hidden;
+  }
+  
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: #64b5f6;
+  }
+  
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(13, 71, 161, 0.15);
+  }
+  
+  .card h3 {
+    font-size: 1.2rem;
+    color: #0d47a1;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+  
+  .card h1 {
+    font-size: 3rem;
+    color: #0d47a1;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 5px rgba(13, 71, 161, 0.2);
+  }
+  
+  .card p {
+    font-size: 0.95rem;
+    color: #0d47a1;
+    font-weight: 500;
+  }
 
   /* Animated word */
-  .animated-text{display:inline-block;color:#007c91;font-weight:800;font-size:1.3rem;border-right:3px solid #007c91;animation:blink 0.7s step-end infinite alternate}
-  @keyframes blink{from{border-color:transparent}to{border-color:#007c91}}
+  .animated-text {
+    display: inline-block;
+    color: #0d47a1;
+    font-weight: 700;
+    font-size: 1.3rem;
+    border-right: 3px solid #0d47a1;
+    animation: blink 0.7s step-end infinite alternate;
+    padding-right: 5px;
+  }
+  
+  @keyframes blink {
+    from { border-color: transparent }
+    to { border-color: #0d47a1 }
+  }
 
   /* Tables */
-  table{width:100%;border-collapse:collapse;margin-top:20px;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 5px 20px rgba(0,140,180,0.1)}
-  table th, table td{padding:12px;text-align:left;border-bottom:1px solid #e0f7fa;color:#007c91}
-  table th{color:#00acc1;font-weight:700}
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #ffffff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(13, 71, 161, 0.1);
+  }
+  
+  table th, table td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid #e3f2fd;
+    color: #0d47a1;
+  }
+  
+  table th {
+    color: #0d47a1;
+    font-weight: 700;
+    background: #e3f2fd;
+  }
+  
+  table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  table tr:hover {
+    background: #f0f8ff;
+  }
 
   /* Footer */
-  footer{text-align:center;padding:20px;color:#007c91;font-size:0.9rem;border-top:1px solid #c0e6ef}
+  footer {
+    text-align: center;
+    padding: 25px;
+    color: #0d47a1;
+    font-size: 0.9rem;
+    border-top: 1px solid #e3f2fd;
+    margin-top: 40px;
+  }
 
   /* Animations */
-  @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes fadeInLeft{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:translateX(0)}}
-  @keyframes fadeInRight{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px) }
+    to { opacity: 1; transform: translateY(0) }
+  }
+  
+  @keyframes fadeInLeft {
+    from { opacity: 0; transform: translateX(-40px) }
+    to { opacity: 1; transform: translateX(0) }
+  }
+  
+  @keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(40px) }
+    to { opacity: 1; transform: translateX(0) }
+  }
+
+  /* Message box styles */
+  .msg-box {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .msg-box .msg-ui {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .msg-box input.msg-input {
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 1px solid #e3f2fd;
+    min-width: 200px;
+    background: #f5fbff;
+    color: #0d47a1;
+    transition: 0.3s;
+    font-size: 0.9rem;
+  }
+  
+  .msg-box input.msg-input:focus {
+    outline: none;
+    border-color: #64b5f6;
+    box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2);
+  }
+  
+  .msg-box button.msg-toggle {
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: none;
+    background: #0d47a1;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  
+  .msg-box button.msg-toggle:hover {
+    background: #0a3a8a;
+    transform: translateY(-2px);
+  }
+  
+  .msg-box button.msg-send {
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: none;
+    background: #64b5f6;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  
+  .msg-box button.msg-send:hover {
+    background: #0d47a1;
+    transform: translateY(-2px);
+  }
+  
+  .msg-small {
+    font-size: 0.85rem;
+    color: #0d47a1;
+    margin-left: 8px;
+    font-weight: 500;
+  }
+  
+  .section-title {
+    font-size: 1.8rem;
+    color: #0d47a1;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e3f2fd;
+    font-weight: 700;
+  }
 
   /* Responsive */
-  @media(max-width:900px){body{flex-direction:column}.sidebar{width:100%;flex-direction:row;justify-content:space-around;border-radius:0}.main-content{padding:20px;border-radius:0}}
-
-  /* Message box styles (used only on All Patients page) */
-  .msg-box{display:flex;gap:8px;align-items:center}
-  .msg-box .msg-ui{display:flex;gap:8px;align-items:center}
-  .msg-box input.msg-input{padding:8px;border-radius:8px;border:1px solid #cfeff3;min-width:180px;background:#fff;color:#007c91}
-  .msg-box button.msg-toggle{padding:8px 10px;border-radius:8px;border:none;background:#00acc1;color:#fff;cursor:pointer}
-  .msg-box button.msg-send{padding:8px 10px;border-radius:8px;border:none;background:#007c91;color:#fff;cursor:pointer}
-  .msg-small{font-size:0.85rem;color:#006a73;margin-left:8px}
+  @media (max-width: 1100px) {
+    body {
+      flex-direction: column;
+      padding-top: 80px;
+    }
+    
+    .sidebar {
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-around;
+      border-radius: 0;
+      padding: 20px 0;
+    }
+    
+    .sidebar h2 {
+      display: none;
+    }
+    
+    .sidebar ul {
+      display: flex;
+      justify-content: space-around;
+    }
+    
+    .sidebar ul li {
+      flex-direction: column;
+      text-align: center;
+      padding: 15px;
+      margin-bottom: 0;
+      width: auto;
+    }
+    
+    .sidebar ul li i {
+      margin-right: 0;
+      margin-bottom: 8px;
+    }
+    
+    .sidebar ul li:hover, .sidebar ul li.active {
+      transform: translateY(-5px);
+    }
+    
+    .main-content {
+      padding: 30px;
+      border-radius: 0;
+    }
+    
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .date-display {
+      margin-top: 15px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .topbar {
+      padding: 0 20px;
+    }
+    
+    .dashboard-cards {
+      grid-template-columns: 1fr;
+    }
+    
+    .main-content {
+      padding: 20px;
+    }
+    
+    header h1 {
+      font-size: 2rem;
+    }
+    
+    .sidebar ul li span {
+      font-size: 0.85rem;
+    }
+  }
 </style>
 </head>
 <body>
 
-<!-- Top navigation bar added; links point to example pages (create these files or update hrefs) -->
+<!-- Top navigation bar -->
 <div class="topbar">
   <div class="logo">
-    <!-- save the provided PNG next to this HTML file as "vital-link.png" or update the src path -->
-    <img src="vital-link-logo.png" alt="Vital Link logo">
+    <img src="vital-link-logo.png" alt="Vital Link Logo">
   </div>
   <nav>
-    <a href="index.html">LOGOUT</a>
+    <a href="index.html"><i class="fas fa-sign-out-alt"></i> LOGOUT</a>
   </nav>
 </div>
 
 <aside class="sidebar">
+  <h2>Doctor Dashboard</h2>
   <ul>
-    <li data-page="dashboard" class="active"><i class="fas fa-user-md"></i> Dashboard</li>
-    <li data-page="appointments"><i class="fas fa-calendar-check"></i> Appointments</li>
-    <li data-page="icu"><i class="fas fa-procedures"></i> ICU Patients</li>
-    <li data-page="patients"><i class="fas fa-users"></i> All Patients</li>
-    
-    
+    <li data-page="dashboard" class="active">
+      <i class="fas fa-user-md"></i>
+      <span>Dashboard</span>
+    </li>
+    <li data-page="appointments">
+      <i class="fas fa-calendar-check"></i>
+      <span>Appointments</span>
+    </li>
+    <li data-page="icu">
+      <i class="fas fa-procedures"></i>
+      <span>ICU Patients</span>
+    </li>
+    <li data-page="patients">
+      <i class="fas fa-users"></i>
+      <span>All Patients</span>
+    </li>
   </ul>
 </aside>
 
@@ -105,8 +512,8 @@
       <h1>Welcome, <span id="doctor-name">Dr. Aisha Kapoor</span></h1>
       <p>Providing care with <span class="animated-text"></span></p>
     </div>
-    <div>
-      <p><i class="fas fa-clock"></i> Today: 20 Oct 2025</p>
+    <div class="date-display">
+      <i class="fas fa-clock"></i> Today: 20 Oct 2025
     </div>
   </header>
 
@@ -118,61 +525,124 @@
 </section>
 
 <script>
-  const doctorData={
-    name:"Dr. Aisha Kapoor",
-    dashboard:{totalPatients:248,appointmentsToday:18,icuPatients:4,pendingReports:6,messages:12,surgeriesScheduled:2},
-    appointments:[{patient:"Jawahar Singh",time:"10:00 AM",type:"Consultation"},{patient:"Sita Polisetty",time:"11:30 AM",type:"Follow-up"}],
-    icu:[{patient:"Asma Khan",condition:"Critical"},{patient:"Sita Pollisetty",condition:"Stable"}],
-    patients:[{name:"Jawahar Singh",age:45,condition:"Flu"},{name:"Dhruv Chandra",age:30,condition:"Check-up"},{name:"Ramaswamy Iyengar",age:60,condition:"Heart Surgery"},{name:"Sita Pollisetty",age:30,condition:"Tonsilitis"}],
-    prescriptions:[{patient:"Jawahar Singh",medication:"Medicine A",dosage:"2x/day"},{patient:"Supreet Chetty",medication:"Medicine B",dosage:"1x/day"}],
-    settings:{theme:"Light",notifications:true}
+  const doctorData = {
+    name: "Dr. Aisha Kapoor",
+    dashboard: {
+      totalPatients: 248,
+      appointmentsToday: 18,
+      icuPatients: 4,
+      pendingReports: 6,
+      messages: 12,
+      surgeriesScheduled: 2
+    },
+    appointments: [
+      {patient: "Jawahar Singh", time: "10:00 AM", type: "Consultation"},
+      {patient: "Sita Polisetty", time: "11:30 AM", type: "Follow-up"},
+      {patient: "Rahul Verma", time: "02:15 PM", type: "New Patient"},
+      {patient: "Priya Sharma", time: "04:00 PM", type: "Post-op Check"}
+    ],
+    icu: [
+      {patient: "Asma Khan", condition: "Critical", room: "ICU-03"},
+      {patient: "Sita Pollisetty", condition: "Stable", room: "ICU-07"},
+      {patient: "Michael Chen", condition: "Critical", room: "ICU-11"},
+      {patient: "Anjali Patel", condition: "Improving", room: "ICU-05"}
+    ],
+    patients: [
+      {name: "Jawahar Singh", age: 45, condition: "Flu", lastVisit: "15 Oct 2025"},
+      {name: "Dhruv Chandra", age: 30, condition: "Check-up", lastVisit: "18 Oct 2025"},
+      {name: "Ramaswamy Iyengar", age: 60, condition: "Heart Surgery", lastVisit: "12 Oct 2025"},
+      {name: "Sita Pollisetty", age: 30, condition: "Tonsilitis", lastVisit: "19 Oct 2025"},
+      {name: "Anika Joshi", age: 28, condition: "Pregnancy Check", lastVisit: "17 Oct 2025"},
+      {name: "Rohan Mehta", age: 52, condition: "Diabetes", lastVisit: "14 Oct 2025"}
+    ],
+    prescriptions: [
+      {patient: "Jawahar Singh", medication: "Medicine A", dosage: "2x/day"},
+      {patient: "Supreet Chetty", medication: "Medicine B", dosage: "1x/day"}
+    ],
+    settings: {theme: "Light", notifications: true}
   };
 
   // store sent messages (in-memory)
   const messagesLog = [];
 
-  const words=["Compassion","Precision","Care","Health","Wellness"];
-  let i=0;
-  const animatedText=document.querySelector(".animated-text");
-  setInterval(()=>{animatedText.textContent=words[i];i=(i+1)%words.length;},2000);
+  const words = ["Compassion", "Precision", "Care", "Health", "Wellness"];
+  let i = 0;
+  const animatedText = document.querySelector(".animated-text");
+  setInterval(() => {
+    animatedText.textContent = words[i];
+    i = (i + 1) % words.length;
+  }, 2000);
 
-  const contentDiv=document.getElementById('dynamic-content');
-  document.getElementById('doctor-name').textContent=doctorData.name;
+  const contentDiv = document.getElementById('dynamic-content');
+  document.getElementById('doctor-name').textContent = doctorData.name;
 
-  function revealCards(){ScrollReveal().reveal('.card',{delay:200,distance:'40px',origin:'bottom',duration:1000,easing:'ease-in-out',interval:150});}
+  function revealCards() {
+    ScrollReveal().reveal('.card', {
+      delay: 200,
+      distance: '40px',
+      origin: 'bottom',
+      duration: 1000,
+      easing: 'ease-in-out',
+      interval: 150
+    });
+  }
 
-  function loadPage(page){
-    contentDiv.innerHTML="";
-  document.querySelectorAll('.sidebar ul li').forEach(li=>li.classList.remove('active'));
-  document.querySelector(`.sidebar ul li[data-page="${page}"]`).classList.add('active');
+  function loadPage(page) {
+    contentDiv.innerHTML = "";
+    document.querySelectorAll('.sidebar ul li').forEach(li => li.classList.remove('active'));
+    document.querySelector(`.sidebar ul li[data-page="${page}"]`).classList.add('active');
 
-    if(page==='dashboard'){
-      const d=doctorData.dashboard;
-      contentDiv.innerHTML=`
+    if (page === 'dashboard') {
+      const d = doctorData.dashboard;
+      contentDiv.innerHTML = `
         <div class="dashboard-cards">
-          <div class="card"><h3>Total Patients</h3><h1>${d.totalPatients}</h1><p>Patients under your supervision</p></div>
-          <div class="card"><h3>Appointments Today</h3><h1>${d.appointmentsToday}</h1><p>Scheduled consultations</p></div>
-          <div class="card"><h3>ICU Patients</h3><h1>${d.icuPatients}</h1><p>Currently critical</p></div>
-          <div class="card"><h3>Pending Reports</h3><h1>${d.pendingReports}</h1><p>Lab or diagnostic updates</p></div>
-          <div class="card"><h3>Messages</h3><h1>${d.messages}</h1><p>Unread communications</p></div>
-          <div class="card"><h3>Surgeries Scheduled</h3><h1>${d.surgeriesScheduled}</h1><p>Upcoming operations</p></div>
+          <div class="card">
+            <h3>Total Patients</h3>
+            <h1>${d.totalPatients}</h1>
+            <p>Patients under your supervision</p>
+          </div>
+          <div class="card">
+            <h3>Appointments Today</h3>
+            <h1>${d.appointmentsToday}</h1>
+            <p>Scheduled consultations</p>
+          </div>
+          <div class="card">
+            <h3>ICU Patients</h3>
+            <h1>${d.icuPatients}</h1>
+            <p>Currently critical</p>
+          </div>
+          <div class="card">
+            <h3>Pending Reports</h3>
+            <h1>${d.pendingReports}</h1>
+            <p>Lab or diagnostic updates</p>
+          </div>
+          <div class="card">
+            <h3>Messages</h3>
+            <h1>${d.messages}</h1>
+            <p>Unread communications</p>
+          </div>
+          <div class="card">
+            <h3>Surgeries Scheduled</h3>
+            <h1>${d.surgeriesScheduled}</h1>
+            <p>Upcoming operations</p>
+          </div>
         </div>
       `;
       revealCards();
-    }
-    else{
+    } else {
       // Special rendering for patients: include a message box next to each patient
-      if(page === 'patients'){
+      if (page === 'patients') {
         const items = doctorData.patients || [];
-        let html = `<h2>All Patients</h2><table><tr><th>Name</th><th>Age</th><th>Condition</th><th>Message</th></tr>`;
+        let html = `<h2 class="section-title">All Patients</h2><table><tr><th>Name</th><th>Age</th><th>Condition</th><th>Last Visit</th><th>Message</th></tr>`;
         items.forEach((p, idx) => {
           html += `<tr>
             <td>${p.name}</td>
             <td>${p.age ?? ''}</td>
             <td>${p.condition ?? ''}</td>
+            <td>${p.lastVisit ?? ''}</td>
             <td>
               <div class="msg-box" data-index="${idx}">
-                <button class="msg-toggle">Message</button>
+                <button class="msg-toggle"><i class="fas fa-comment-medical"></i></button>
                 <div class="msg-ui" style="display:none;">
                   <input type="text" class="msg-input" placeholder="Type a message to ${p.name}">
                   <button class="msg-send">Send</button>
@@ -186,49 +656,61 @@
         contentDiv.innerHTML = html;
 
         // Attach interactions for message UI
-        contentDiv.querySelectorAll('.msg-toggle').forEach(btn=>{
-          btn.addEventListener('click', ()=> {
+        contentDiv.querySelectorAll('.msg-toggle').forEach(btn => {
+          btn.addEventListener('click', () => {
             const ui = btn.parentElement.querySelector('.msg-ui');
             ui.style.display = ui.style.display === 'none' ? 'flex' : 'none';
             const input = ui.querySelector('.msg-input');
-            if(ui.style.display === 'flex') input.focus();
+            if (ui.style.display === 'flex') input.focus();
           });
         });
 
-        contentDiv.querySelectorAll('.msg-send').forEach(btn=>{
-          btn.addEventListener('click', ()=> {
+        contentDiv.querySelectorAll('.msg-send').forEach(btn => {
+          btn.addEventListener('click', () => {
             const box = btn.closest('.msg-box');
             const idx = box.dataset.index;
             const input = box.querySelector('.msg-input');
             const text = (input.value || '').trim();
             const feedback = box.querySelector('.msg-small');
-            if(!text) { feedback.textContent = 'Enter a message'; setTimeout(()=>feedback.textContent='',1500); return; }
-            messagesLog.push({to: doctorData.patients[idx].name, message: text, time: new Date().toISOString()});
+            if (!text) {
+              feedback.textContent = 'Enter a message';
+              setTimeout(() => feedback.textContent = '', 1500);
+              return;
+            }
+            messagesLog.push({
+              to: doctorData.patients[idx].name,
+              message: text,
+              time: new Date().toISOString()
+            });
             feedback.textContent = 'Sent';
             input.value = '';
-            setTimeout(()=>feedback.textContent = '', 2000);
-            // Optional: you can console.log or send to server here
-            console.log('Message sent ->', messagesLog[messagesLog.length-1]);
+            setTimeout(() => feedback.textContent = '', 2000);
+            console.log('Message sent ->', messagesLog[messagesLog.length - 1]);
           });
         });
       } else {
-        let items=doctorData[page]||[];
-        if(items.length>0){
-          let headers=Object.keys(items[0]);
-          let html = `<h2>${page.charAt(0).toUpperCase()+page.slice(1)}</h2><table><tr>`;
-          headers.forEach(h => html += `<th>${h.charAt(0).toUpperCase()+h.slice(1)}</th>`);
+        let items = doctorData[page] || [];
+        if (items.length > 0) {
+          let headers = Object.keys(items[0]);
+          let html = `<h2 class="section-title">${page.charAt(0).toUpperCase() + page.slice(1)}</h2><table><tr>`;
+          headers.forEach(h => html += `<th>${h.charAt(0).toUpperCase() + h.slice(1)}</th>`);
           html += "</tr>";
-          items.forEach(obj => { html += "<tr>"; headers.forEach(h => html += `<td>${obj[h]}</td>`); html += "</tr>"; });
-          html += "</table>"; contentDiv.innerHTML = html;
+          items.forEach(obj => {
+            html += "<tr>";
+            headers.forEach(h => html += `<td>${obj[h]}</td>`);
+            html += "</tr>";
+          });
+          html += "</table>";
+          contentDiv.innerHTML = html;
         } else {
-          contentDiv.innerHTML = `<h2>${page.charAt(0).toUpperCase()+page.slice(1)}</h2><p>No data available</p>`;
+          contentDiv.innerHTML = `<h2 class="section-title">${page.charAt(0).toUpperCase() + page.slice(1)}</h2><p>No data available</p>`;
         }
       }
     }
   }
 
   loadPage('dashboard');
-  document.querySelectorAll('.sidebar ul li').forEach(li=>li.addEventListener('click',()=>loadPage(li.dataset.page)));
+  document.querySelectorAll('.sidebar ul li').forEach(li => li.addEventListener('click', () => loadPage(li.dataset.page)));
 </script>
 
 </body>
