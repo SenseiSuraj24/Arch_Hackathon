@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Question - Forum</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* Inline CSS for question page */
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #fff; }
+    body { background-color: #121212; line-height: 1.5; font-size: 14px; }
+    .topbar { background-color: #1e1e1e; display: flex; align-items: center; justify-content: space-between; padding: 0 1rem; height: 60px; border-bottom: 1px solid #333; }
+    .logo img { height: 40px; width: auto; }
+    .container { display: flex; height: calc(100vh - 60px); }
+    .main { flex:1; padding: 24px; overflow-y:auto; background:#0f172a; }
+    .back { display:inline-block; margin-bottom:12px; color:#60a5fa; text-decoration:none; font-weight:600; }
+    .question-card { background:#1e293b; padding:20px; border-radius:10px; margin-bottom:18px; }
+    .question-card h2 { font-size:20px; margin-bottom:8px; color:#fff; }
+    .meta { color:#a1a1aa; font-size:13px; margin-bottom:10px; }
+    .description { color:#d1d5db; margin-bottom:12px; }
+    .answers { display:flex; flex-direction:column; gap:10px; margin-bottom:18px; }
+    .answer { background:#111827; padding:12px; border-radius:8px; color:#d1d5db; }
+    .answer .meta { color:#9ca3af; font-size:12px; margin-bottom:6px; }
+    .answer-form { background:#1e293b; padding:16px; border-radius:10px; max-width:800px; display:flex; flex-direction:column; gap:10px; }
+    .answer-form textarea { background:#0b1220; border:none; padding:10px; border-radius:8px; color:#d1d5db; min-height:80px; }
+    .answer-form button { background:#2563eb; border:none; padding:10px 14px; border-radius:8px; color:#fff; font-weight:700; cursor:pointer; }
+    .small-muted { color:#9ca3af; font-size:12px; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="logo"><img src="vital-link-logo.png" alt="Logo"></div>
+    <div></div>
+  </div>
+
+  <div class="container">
+    <main class="main">
+      <a class="back" href="forum.html">← Back to Forum</a>
+
+      <div id="questionArea" class="question-card"></div>
+
+      <div class="answers" id="answersList"></div>
+
+      <form id="answerForm" class="answer-form" onsubmit="submitAnswer(event)">
+        <label class="small-muted">Your Answer</label>
+        <textarea id="answerText" placeholder="Type your answer here..." required></textarea>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <input id="answerAuthor" type="text" placeholder="Your name (optional)" style="padding:8px; border-radius:6px; border:none; background:#0b1220; color:#d1d5db;" />
+          <button type="submit">Post Answer</button>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'forum_local_data_v1';
+
+    function loadData() {
+      try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : []; } catch (e) { return []; }
+    }
+    function saveData(arr) { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
+    function qs(s){ return document.querySelector(s); }
+
+    function getIdFromURL() {
+      const p = new URLSearchParams(location.search);
+      return p.get('id');
+    }
+
+    function escapeHtml(str) {
+      if (str === undefined || str === null) return '';
+      return String(str).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
+    }
+
+    function renderQuestion(q) {
+      const el = qs('#questionArea');
+      if (!q) {
+        el.innerHTML = '<div class="small-muted">Question not found.</div>';
+        qs('#answersList').innerHTML = '';
+        qs('#answerForm').style.display = 'none';
+        return;
+      }
+      el.innerHTML = `<h2>${escapeHtml(q.title)}</h2>
+        <div class="meta">By ${escapeHtml(q.author)} — ${escapeHtml(q.date)}</div>
+        <div class="description">${escapeHtml(q.description || '')}</div>`;
+      renderAnswers(q.answers || []);
+      qs('#answerForm').style.display = '';
+    }
+
+    function renderAnswers(answers) {
+      const list = qs('#answersList');
+      if (!answers || answers.length === 0) {
+        list.innerHTML = '<div class="small-muted">No answers yet. Be the first to answer.</div>';
+        return;
+      }
+      list.innerHTML = '';
+      answers.slice().reverse().forEach(a => {
+        const div = document.createElement('div');
+        div.className = 'answer';
+        div.innerHTML = `<div class="meta">By ${escapeHtml(a.author || 'Anonymous')} — ${escapeHtml(a.date)}</div>
+                         <div>${escapeHtml(a.text)}</div>`;
+        list.appendChild(div);
+      });
+    }
+
+    function submitAnswer(e) {
+      e.preventDefault();
+      const id = getIdFromURL();
+      if (!id) return;
+      const text = qs('#answerText').value.trim();
+      if (!text) return;
+      const author = qs('#answerAuthor').value.trim() || 'You';
+      const data = loadData();
+      const qIndex = data.findIndex(x => x.id === id);
+      if (qIndex === -1) return alert('Question not found');
+      const answer = { id: 'ans_' + Date.now(), text, author, date: new Date().toLocaleString() };
+      data[qIndex].answers.push(answer);
+      saveData(data);
+      qs('#answerText').value = '';
+      qs('#answerAuthor').value = '';
+      renderAnswers(data[qIndex].answers);
+    }
+
+    (function(){
+      const id = getIdFromURL();
+      const data = loadData();
+      const q = data.find(x => x.id === id);
+      renderQuestion(q);
+    })();
+  </script>
+</body>
+</html>

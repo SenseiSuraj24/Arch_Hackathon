@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prescription OCR Scanner</title>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <style>
+    body {
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #1e293b;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #334155;
+    }
+    header h1 {
+      font-size: 22px;
+      color: #60a5fa;
+    }
+    header button {
+      background: #2563eb;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    header button:hover { background: #1d4ed8; }
+
+    .container {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+    }
+    .upload-box {
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 10px;
+      border: 2px dashed #3b82f6;
+      text-align: center;
+      width: 80%;
+      max-width: 600px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .upload-box:hover { background: #2563eb33; }
+    .upload-box input { display: none; }
+    .preview { margin-top: 20px; max-width: 300px; border-radius: 10px; border: 1px solid #3b82f6; }
+    #progress { margin-top: 15px; color: #93c5fd; }
+
+    .results {
+      width: 90%;
+      max-width: 800px;
+      background: #1e293b;
+      padding: 25px;
+      border-radius: 10px;
+    }
+    pre {
+      background: #111827;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      color: #d1d5db;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #334155;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #2563eb;
+      color: white;
+    }
+    td {
+      background-color: #111827;
+      color: #e2e8f0;
+    }
+    .btn {
+      background: #2563eb;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn:hover { background: #1d4ed8; }
+    .actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+    .saved-list {
+      width: 90%;
+      max-width: 800px;
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .saved-item {
+      background: #111827;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #334155;
+      position: relative;
+    }
+    .saved-item button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #dc2626;
+      border: none;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: 0.3s;
+    }
+    .saved-item button:hover {
+      background: #b91c1c;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Prescription Scanner</h1>
+    <button onclick="window.location.href='patient-dashboard.html'">← Back to Dashboard</button>
+  </header>
+
+  <div class="container">
+    <label class="upload-box" id="uploadBox">
+      <input type="file" id="fileInput" accept="image/*" />
+      <p>📄 Click or drag an image of a prescription to upload</p>
+    </label>
+    <img id="preview" class="preview" style="display:none;" />
+    <button id="scanBtn" class="btn" style="display:none;">🔍 Scan Prescription</button>
+    <p id="progress"></p>
+
+    <div id="results" class="results" style="display:none;">
+      <h2>Extracted Text</h2>
+      <pre id="ocrText"></pre>
+
+      <h2>Structured Prescription Data</h2>
+      <table id="parsedTable">
+        <thead>
+          <tr><th>Medicine</th><th>Dosage</th><th>Frequency</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="actions">
+        <button class="btn" id="saveBtn">💾 Save Prescription</button>
+      </div>
+    </div>
+
+    <div id="savedPrescriptions" class="saved-list" style="display:none;">
+      <h2>Saved Prescriptions</h2>
+      <div id="prescriptionList"></div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'patient_prescriptions_v1';
+    const fileInput = document.getElementById("fileInput");
+    const preview = document.getElementById("preview");
+    const scanBtn = document.getElementById("scanBtn");
+    const progress = document.getElementById("progress");
+    const results = document.getElementById("results");
+    const ocrText = document.getElementById("ocrText");
+    const saveBtn = document.getElementById("saveBtn");
+    const savedPrescriptions = document.getElementById("savedPrescriptions");
+    const prescriptionList = document.getElementById("prescriptionList");
+
+    document.getElementById("uploadBox").addEventListener("click", () => fileInput.click());
+    fileInput.addEventListener("change", handleFile);
+
+    function handleFile(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      preview.src = url;
+      preview.style.display = "block";
+      scanBtn.style.display = "inline-block";
+    }
+
+    scanBtn.addEventListener("click", async () => {
+      progress.textContent = "Scanning...";
+      results.style.display = "none";
+      ocrText.textContent = "";
+      const image = preview.src;
+
+      try {
+        const { data: { text } } = await Tesseract.recognize(image, 'eng', {
+          logger: m => progress.textContent = `${m.status} ${(m.progress * 100).toFixed(0)}%`
+        });
+
+        progress.textContent = "Scan complete!";
+        ocrText.textContent = text.trim();
+        results.style.display = "block";
+        parsePrescription(text);
+      } catch (err) {
+        progress.textContent = "Error: " + err.message;
+      }
+    });
+
+    function parsePrescription(text) {
+      const lines = text.split(/\n+/).map(l => l.trim()).filter(Boolean);
+      const medicineRegex = /\b([A-Z][a-zA-Z0-9\-]+)\b/g;
+      const dosageRegex = /(\d+ ?mg|\d+ ?ml|\d+ ?tab|\d+ ?caps?)/gi;
+      const frequencyRegex = /(once|twice|daily|morning|night|after meals|before meals|2\s?x\s?day|3\s?x\s?day)/gi;
+
+      const parsedData = [];
+
+      for (const line of lines) {
+        const med = (line.match(medicineRegex) || []).join(" ");
+        const dose = (line.match(dosageRegex) || []).join(" ");
+        const freq = (line.match(frequencyRegex) || []).join(" ");
+        if (med || dose || freq) parsedData.push({ med, dose, freq });
+      }
+
+      const tbody = document.querySelector("#parsedTable tbody");
+      tbody.innerHTML = "";
+      parsedData.forEach(({ med, dose, freq }) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${med || '-'}</td><td>${dose || '-'}</td><td>${freq || '-'}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    saveBtn.addEventListener("click", () => {
+      const prescriptions = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      const text = ocrText.textContent.trim();
+      if (!text) {
+        alert("Scan a prescription before saving!");
+        return;
+      }
+      const newEntry = {
+        id: Date.now(),
+        text: text,
+        date: new Date().toLocaleString()
+      };
+      prescriptions.push(newEntry);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(prescriptions));
+      alert("Prescription saved!");
+      loadSavedPrescriptions();
+    });
+
+    function deletePrescription(id) {
+      let prescriptions = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      prescriptions = prescriptions.filter(p => p.id !== id);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(prescriptions));
+      loadSavedPrescriptions();
+    }
+
+    function loadSavedPrescriptions() {
+      const prescriptions = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      prescriptionList.innerHTML = "";
+      if (prescriptions.length === 0) {
+        savedPrescriptions.style.display = "none";
+        return;
+      }
+      savedPrescriptions.style.display = "block";
+      prescriptions.reverse().forEach(p => {
+        const div = document.createElement("div");
+        div.className = "saved-item";
+        div.innerHTML = `
+          <strong>${p.date}</strong><br>
+          ${p.text.substring(0, 180)}...
+          <button onclick="deletePrescription(${p.id})">Delete</button>
+        `;
+        prescriptionList.appendChild(div);
+      });
+    }
+
+    loadSavedPrescriptions();
+  </script>
+</body>
+</html>

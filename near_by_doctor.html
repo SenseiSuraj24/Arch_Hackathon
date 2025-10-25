@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nearby Doctors Finder</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #f2f8ff;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 15px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    #controls {
+      margin: 15px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    input {
+      padding: 10px;
+      width: 250px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #map {
+      height: 450px;
+      width: 90%;
+      margin: 0 auto;
+      border-radius: 10px;
+    }
+    .doctor-list {
+      width: 90%;
+      margin: 20px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .doctor-card {
+      background: white;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      text-align: left;
+    }
+    .doctor-card h3 {
+      color: #007bff;
+      margin-bottom: 5px;
+    }
+    .back-btn {
+      background: #6c757d;
+    }
+  </style>
+</head>
+<body>
+  <header>Nearby Doctors Finder</header>
+
+  <div id="controls">
+    <input type="text" id="search" placeholder="Search by name or specialty" />
+    <button onclick="searchDoctors()">Search</button>
+    <button class="back-btn" onclick="goBack()">⬅ Back to Dashboard</button>
+  </div>
+
+  <div id="map"></div>
+  <div class="doctor-list" id="doctorList"></div>
+
+  <script>
+    let map;
+    let allDoctors = [];
+    let markers = [];
+
+    // Haversine distance (in km)
+    function distance(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2)**2 +
+        Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) *
+        Math.sin(dLon/2)**2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    // Initialize map and get user location
+    function initMap() {
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser.");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(pos => {
+        const userLat = pos.coords.latitude;
+        const userLon = pos.coords.longitude;
+
+        map = L.map('map').setView([userLat, userLon], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        L.marker([userLat, userLon]).addTo(map)
+          .bindPopup("You are here")
+          .openPopup();
+
+        fetchNearbyDoctors(userLat, userLon);
+
+      }, err => {
+        alert("Unable to get your location. Please enable location access.");
+      });
+    }
+
+    // Fetch doctors/clinics/hospitals using Overpass API
+    function fetchNearbyDoctors(lat, lon) {
+      const radius = 5000; // 5 km radius
+      const query = `
+        [out:json];
+        (
+          node["amenity"="doctors"](around:${radius},${lat},${lon});
+          node["amenity"="clinic"](around:${radius},${lat},${lon});
+          node["amenity"="hospital"](around:${radius},${lat},${lon});
+        );
+        out center;
+      `;
+
+      fetch("https://overpass-api.de/api/interpreter", {
+        method: "POST",
+        body: query
+      })
+      .then(res => res.json())
+      .then(data => {
+        allDoctors = data.elements.map(d => ({
+          name: d.tags.name || "Unnamed Doctor/Clinic",
+          specialty: d.tags.specialty || d.tags["healthcare:specialty"] || "General Practice",
+          lat: d.lat,
+          lon: d.lon,
+          type: d.tags.amenity
+        }));
+        displayDoctors(allDoctors);
+      })
+      .catch(() => alert("Failed to fetch nearby doctors. Try again later."));
+    }
+
+    // Display doctors on map and list
+    function displayDoctors(doctors) {
+      markers.forEach(m => map.removeLayer(m));
+      markers = [];
+
+      const list = document.getElementById("doctorList");
+      list.innerHTML = "";
+
+      doctors.forEach(doc => {
+        const marker = L.marker([doc.lat, doc.lon]).addTo(map);
+        marker.bindPopup(`<b>${doc.name}</b><br>${doc.specialty}`);
+        markers.push(marker);
+
+        const div = document.createElement("div");
+        div.className = "doctor-card";
+        div.innerHTML = `<h3>${doc.name}</h3>
+                         <p><b>Specialty:</b> ${doc.specialty}</p>
+                         <p><b>Type:</b> ${doc.type}</p>`;
+        list.appendChild(div);
+      });
+
+      if (doctors.length === 0) {
+        list.innerHTML = "<p>No doctors found nearby.</p>";
+      }
+    }
+
+    // Search filter
+    function searchDoctors() {
+      const term = document.getElementById("search").value.toLowerCase();
+      const filtered = allDoctors.filter(
+        d => d.name.toLowerCase().includes(term) ||
+             d.specialty.toLowerCase().includes(term)
+      );
+      displayDoctors(filtered);
+    }
+
+    // Back button
+    function goBack() {
+      window.location.href = "patient-dashboard.html"; // adjust your dashboard file name
+    }
+
+    window.onload = initMap;
+  </script>
+</body>
+</html>
