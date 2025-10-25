@@ -4,247 +4,351 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Schedule Appointment | Vital Link</title>
-
-  <!-- Fonts & Styles -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-</head>
-<style>
-  /* --- Global Variables and Base Styles --- */
-:root {
-    --primary-color: #007BFF; /* Main Action Blue */
-    --secondary-color: #0056b3; /* Darker Blue */
-    --background-color: #f4f7f9; /* Light, soft background */
-    --card-background: #ffffff; /* White card background */
-    --text-color: #333333;
-    --label-color: #6c757d;
-    --border-color: #e0e0e0;
-    --shadow-heavy: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    line-height: 1.6;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
-
-/* --- Layout Container --- */
-.main-content {
-    width: 100%;
-    max-width: 900px; /* Constrain width for desktop view */
-    margin: 0 auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* --- Header --- */
-.dashboard-header {
-    width: 100%;
-    max-width: 600px;
-    text-align: left;
-    margin-bottom: 20px;
-    padding: 0 15px;
-}
-
-.dashboard-header h1 {
-    font-size: 2.2em;
-    font-weight: 700;
-    color: var(--text-color);
-}
-
-/* --- Appointment Card & Form Styling --- */
-.appointment-section {
-    width: 100%;
-    max-width: 600px; /* Set the max width for the form container */
-    margin: 20px 0;
-}
-
-.appointment-logo h2 {
-    font-size: 1.6em;
-    font-weight: 600;
-    color: var(--text-color);
-    margin-bottom: 15px;
-    padding: 0 15px;
-}
-
-.appointment-card {
-    background-color: var(--card-background);
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: var(--shadow-heavy); /* Use a soft, pronounced shadow */
-}
-
-.form-group {
-    margin-bottom: 25px;
-}
-
-.form-group label {
-    display: block;
-    font-weight: 600;
-    color: var(--label-color);
-    margin-bottom: 8px;
-    font-size: 0.95em;
-}
-
-/* Styling for all input types and select/textarea */
-.form-group input:not([type="submit"]), 
-.form-group select, 
-.form-group textarea {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1em;
-    color: var(--text-color);
-    transition: border-color 0.3s, box-shadow 0.3s;
-    background-color: #fdfdfd;
-}
-
-.form-group input:focus, 
-.form-group select:focus, 
-.form-group textarea:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2); /* Subtle focus ring */
-    outline: none;
-    background-color: var(--card-background);
-}
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-/* Ensure the date/time icons are correctly visible */
-.form-group input[type="date"],
-.form-group input[type="time"] {
-    position: relative;
-    /* Optional: Hide default text placeholder in date inputs */
-    color: var(--text-color);
-}
-
-/* --- Submit Button --- */
-.save-btn {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s;
-    letter-spacing: 0.5px;
-    margin-top: 15px;
-}
-
-.save-btn:hover {
-    background-color: var(--secondary-color);
-}
-
-.save-btn:active {
-    transform: translateY(1px);
-}
-
-/* --- Confirmation Message Styling --- */
-.confirmation-box {
-    text-align: center;
-    background-color: #e9f7ef; /* Light green/success background */
-    border: 1px solid #d4edda;
-    color: #155724; /* Dark green text */
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 150, 0, 0.1);
-    margin-top: 30px;
-}
-
-.confirmation-box h3 {
-    font-size: 1.8em;
-    margin-bottom: 20px;
-    font-weight: 700;
-}
-
-.confirmation-box p {
-    font-size: 1.1em;
-    margin-bottom: 10px;
-}
-
-.confirmation-box strong {
-    color: var(--secondary-color);
-}
-
-/* --- Footer --- */
-.dashboard-footer {
-    width: 100%;
-    max-width: 600px;
-    text-align: center;
-    padding: 20px 0 0;
-    color: var(--label-color);
-    font-size: 0.85em;
-    margin-top: auto; /* Push to the bottom */
-}
-
-/* --- Media Queries for Mobile Responsiveness --- */
-@media (max-width: 650px) {
-    .main-content {
-        padding: 10px;
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* --- Global Variables and Base Styles --- */
+    :root {
+        --primary-color: #0d47a1; /* Main Action Blue */
+        --secondary-color: #64b5f6; /* Lighter Blue */
+        --background-color: #e3f2fd; /* Light blue background */
+        --card-background: #ffffff; /* White card background */
+        --text-color: #0d47a1;
+        --label-color: #0d47a1;
+        --border-color: #e3f2fd;
+        --shadow-heavy: 0 10px 25px rgba(13, 71, 161, 0.1);
     }
 
-    .appointment-card {
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        line-height: 1.6;
+        min-height: 100vh;
+        padding-top: 80px;
+    }
+
+    /* --- Site Header & Navigation --- */
+    .site-header {
+        background-color: #0d47a1;
+        box-shadow: 0 2px 4px rgba(13, 71, 161, 0.2);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 5%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+    }
+    
+    .logo img { 
+        height: 45px; 
+        width: auto;
+        object-fit: contain;
+    }
+    
+    .main-nav { 
+        display: flex; 
+        gap: 20px; 
+    }
+    
+    .main-nav a {
+        color: white;
+        font-weight: 600;
+        padding: 8px 16px;
+        border-radius: 20px;
+        transition: all 0.3s;
+    }
+    
+    .main-nav a:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+    }
+    
+    .logout-btn {
+        background-color: #64b5f6;
+        color: white !important;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 700;
+        transition: all 0.3s;
+    }
+    
+    .logout-btn:hover { 
+        background-color: #0a3a8a;
+        transform: translateY(-2px);
+    }
+
+    /* --- Layout Container --- */
+    .main-content {
+        width: 100%;
+        max-width: 900px; /* Constrain width for desktop view */
+        margin: 0 auto;
         padding: 20px;
-        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* --- Header --- */
+    .dashboard-header {
+        width: 100%;
+        max-width: 600px;
+        text-align: left;
+        margin-bottom: 20px;
+        padding: 0 15px;
     }
 
     .dashboard-header h1 {
-        font-size: 1.8em;
+        font-size: 2.2em;
+        font-weight: 700;
+        color: var(--text-color);
+    }
+
+    /* --- Appointment Card & Form Styling --- */
+    .appointment-section {
+        width: 100%;
+        max-width: 600px; /* Set the max width for the form container */
+        margin: 20px 0;
     }
 
     .appointment-logo h2 {
-        font-size: 1.4em;
-    }
-    
-    .form-group {
-        margin-bottom: 20px;
+        font-size: 1.6em;
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 15px;
+        padding: 0 15px;
     }
 
-    .form-group input, 
+    .appointment-card {
+        background-color: var(--card-background);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: var(--shadow-heavy); /* Use a soft, pronounced shadow */
+        border: 1px solid #e3f2fd;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .appointment-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: #64b5f6;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: var(--label-color);
+        margin-bottom: 8px;
+        font-size: 0.95em;
+    }
+
+    /* Styling for all input types and select/textarea */
+    .form-group input:not([type="submit"]), 
     .form-group select, 
     .form-group textarea {
-        padding: 10px 12px;
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1em;
+        color: var(--text-color);
+        transition: border-color 0.3s, box-shadow 0.3s;
+        background-color: #f5fbff;
     }
-}
-</style>
+
+    .form-group input:focus, 
+    .form-group select:focus, 
+    .form-group textarea:focus {
+        border-color: var(--secondary-color);
+        box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2); /* Subtle focus ring */
+        outline: none;
+        background-color: var(--card-background);
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    /* Ensure the date/time icons are correctly visible */
+    .form-group input[type="date"],
+    .form-group input[type="time"] {
+        position: relative;
+        /* Optional: Hide default text placeholder in date inputs */
+        color: var(--text-color);
+    }
+
+    /* --- Submit Button --- */
+    .save-btn {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.1s;
+        letter-spacing: 0.5px;
+        margin-top: 15px;
+    }
+
+    .save-btn:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-2px);
+    }
+
+    .save-btn:active {
+        transform: translateY(1px);
+    }
+
+    /* --- Confirmation Message Styling --- */
+    .confirmation-box {
+        text-align: center;
+        background-color: #e9f7ef; /* Light green/success background */
+        border: 1px solid #d4edda;
+        color: #155724; /* Dark green text */
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 150, 0, 0.1);
+        margin-top: 30px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .confirmation-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: #00b09b;
+    }
+
+    .confirmation-box h3 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+
+    .confirmation-box p {
+        font-size: 1.1em;
+        margin-bottom: 10px;
+    }
+
+    .confirmation-box strong {
+        color: var(--secondary-color);
+    }
+
+    /* --- Footer --- */
+    .dashboard-footer {
+        width: 100%;
+        max-width: 600px;
+        text-align: center;
+        padding: 20px 0 0;
+        color: var(--label-color);
+        font-size: 0.85em;
+        margin-top: auto; /* Push to the bottom */
+    }
+
+    /* Animated text */
+    .animated-text {
+        display: inline-block;
+        color: #0d47a1;
+        font-weight: 700;
+        font-size: 1.3rem;
+        border-right: 3px solid #0d47a1;
+        animation: blink 0.7s step-end infinite alternate;
+        padding-right: 5px;
+    }
+    
+    @keyframes blink {
+        from { border-color: transparent }
+        to { border-color: #0d47a1 }
+    }
+
+    /* --- Media Queries for Mobile Responsiveness --- */
+    @media (max-width: 768px) {
+        .main-nav { 
+            display: none; 
+        }
+        
+        .main-content {
+            padding: 10px;
+        }
+
+        .appointment-card {
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.8em;
+        }
+
+        .appointment-logo h2 {
+            font-size: 1.4em;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            padding: 10px 12px;
+        }
+    }
+  </style>
+</head>
 <body class="patient-dashboard">
+
+  <!-- Site Header with Navigation -->
+  <header class="site-header">
+    <div class="logo">
+      <img src="vital-link-logo.png" alt="Vital Link Logo">
+    </div>
+    <nav class="main-nav">
+      <a href="patient-dashboard.html">Dashboard</a>
+      <a href="billing.html">Bills</a>
+      <a href="index.html" class="logout-btn">Log Out</a>
+    </nav>
+  </header>
 
   <!-- Main Content -->
   <div class="main-content">
     <header class="dashboard-header">
       <h1>Schedule Appointment</h1>
-      <div class="patient-info">
-
-      </div>
+      <p>Book your medical appointment with <span class="animated-text"></span></p>
     </header>
 
     <section class="appointment-section">
 
       <!-- LOGO ABOVE FORM -->
       <div class="appointment-logo">
-       
         <h2>Book Your Appointment</h2>
       </div>
 
@@ -259,13 +363,12 @@ body {
               <option value="dr-jones">Dr. Aisha Kapoor (Neurologist)</option>
               <option value="dr-patel">Dr. Sameer Varma (Orthopedic)</option>
               <option value="dr-rahul">Dr. Nisha Reddy (Pediatrician)</option>
-              <option value="dr-smith">Dr. Arjun Singh (Genral Physician)</option>
+              <option value="dr-smith">Dr. Arjun Singh (General Physician)</option>
               <option value="dr-jones">Dr. Vivek Sharma (Oncologist)</option>
               <option value="dr-patel">Dr. Sneha Das (Dermatologist)</option>
               <option value="dr-rahul">Dr. Priya Menon (Gynecologist)</option>
               <option value="dr-smith">Dr. Karan Bhatt (Psychiatrist)</option>
-              <option value="dr-jones">Dr. Meera Nair  (Endocrinologist)</option>
-          
+              <option value="dr-jones">Dr. Meera Nair (Endocrinologist)</option>
             </select>
           </div>
 
@@ -294,6 +397,7 @@ body {
         <p>Your appointment has been successfully booked with <strong id="docName"></strong>.</p>
         <p><strong>Date:</strong> <span id="confDate"></span></p>
         <p><strong>Time:</strong> <span id="confTime"></span></p>
+        <p><strong>Reason:</strong> <span id="confReason"></span></p>
       </div>
 
     </section>
@@ -302,9 +406,6 @@ body {
       <p>&copy; 2025 Vital Link. All Rights Reserved.</p>
     </footer>
   </div>
-
-  <!-- Font Awesome -->
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
   <!-- JS for confirmation -->
   <script>
@@ -316,14 +417,26 @@ body {
       const doctor = document.getElementById('doctor');
       const date = document.getElementById('date');
       const time = document.getElementById('time');
+      const reason = document.getElementById('reason');
 
       document.getElementById('docName').textContent = doctor.options[doctor.selectedIndex].text;
       document.getElementById('confDate').textContent = date.value;
       document.getElementById('confTime').textContent = time.value;
+      document.getElementById('confReason').textContent = reason.value;
 
       form.style.display = 'none';
       confirmation.style.display = 'block';
     });
+
+    // Animated text
+    const words = ["Compassion", "Precision", "Care", "Health", "Wellness"];
+    let i = 0;
+    const animatedText = document.querySelector(".animated-text");
+    
+    setInterval(() => {
+      animatedText.textContent = words[i];
+      i = (i + 1) % words.length;
+    }, 2000);
   </script>
 
 </body>

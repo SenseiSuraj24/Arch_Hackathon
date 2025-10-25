@@ -1,25 +1,26 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Health Dashboard - Vital Link</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --sidebar-width: 240px;
-            --sidebar-bg: #212431;
-            --sidebar-border: #313545;
+            --sidebar-bg: #0d47a1;
+            --sidebar-border: #0a3a8a;
             --sidebar-text: #fff;
-            --sidebar-accent: #1953FF;
-            --primary-color: #007BFF;
-            --secondary-color: #0056b3;
-            --background-color: #f4f7f9;
+            --sidebar-accent: #64b5f6;
+            --primary-color: #0d47a1;
+            --secondary-color: #64b5f6;
+            --background-color: #e3f2fd;
             --card-background: #ffffff;
-            --text-color: #333333;
-            --alert-color: #dc3545;
-            --info-color: #ffc107;
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --text-color: #0d47a1;
+            --alert-color: #ff416c;
+            --info-color: #00b09b;
+            --shadow-light: 0 4px 12px rgba(13, 71, 161, 0.1);
         }
         * {
             margin: 0; padding: 0; box-sizing: border-box;
@@ -40,35 +41,43 @@
 
         /* --- Site Header & Main Navigation --- */
         .site-header {
-            background-color: #000000;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background-color: #0d47a1;
+            box-shadow: 0 2px 4px rgba(13, 71, 161, 0.2);
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 5%;
             position: relative; z-index: 100;
         }
-        .logo img { height: 40px; }
+        .logo img { 
+            height: 45px; 
+            width: auto;
+            object-fit: contain;
+        }
         .main-nav { display: flex; gap: 20px; }
         .main-nav a {
             color: white;
             font-weight: 600;
-            padding: 5px 10px;
-            border-radius: 4px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s;
         }
         .main-nav a:hover {
-            background-color: #343a40;
-            color: var(--primary-color);
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
         }
         .logout-btn {
-            background-color: var(--alert-color);
+            background-color: #64b5f6;
             color: white !important;
-            padding: 8px 15px;
-            border-radius: 6px;
+            padding: 8px 16px;
+            border-radius: 20px;
             font-weight: 700;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
         }
-        .logout-btn:hover { background-color: #35c5f9; }
+        .logout-btn:hover { 
+            background-color: #0a3a8a;
+            transform: translateY(-2px);
+        }
 
         /* Hamburger fixed top left */
         .hamburger {
@@ -83,15 +92,16 @@
             height: 36px;
             cursor: pointer;
             z-index: 9999;
-            background: rgba(0,0,0,0.03);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
+            padding: 8px;
         }
         .hamburger span {
             display: block;
             width: 100%;
-            height: 4px;
-            margin: 5px 0;
-            background: whitesmoke;
+            height: 3px;
+            margin: 3px 0;
+            background: white;
             border-radius: 2px;
             transition: all 0.3s ease;
         }
@@ -107,7 +117,7 @@
             border-right: 1px solid var(--sidebar-border);
             color: var(--sidebar-text);
             z-index: 10001;
-            box-shadow: 4px 0 24px rgba(20,24,49,0.16);
+            box-shadow: 4px 0 24px rgba(13, 71, 161, 0.2);
             transform: translateX(-110%);
             transition: transform 0.35s cubic-bezier(.6,-0.16,.46,1.23);
             padding-top: 85px;
@@ -122,7 +132,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(81, 81, 81, 0.36);
+            background: rgba(13, 71, 161, 0.3);
             z-index: 10000;
             transition: opacity 0.3s;
         }
@@ -131,10 +141,10 @@
             list-style: none; padding: 0; margin: 0;
         }
         .sidebar-menu li {
-            border-bottom: 1px solid #ffffff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         .sidebar-menu a {
-            color: whitesmoke;
+            color: white;
             font-size: 1.15em;
             font-weight: 600;
             padding: 18px 24px;
@@ -144,12 +154,14 @@
             transition: background 0.21s, color 0.21s;
         }
         .sidebar-menu a:hover {
-            background: rgb(112, 186, 255);
+            background: #64b5f6;
             color: #fff;
         }
         .sidebar-menu .icon {
             margin-right: 16px;
             font-size: 1.35em;
+            width: 24px;
+            text-align: center;
         }
         @media (max-width: 600px) {
             .sidebar-menu { width: 90vw; padding-top: 70px; }
@@ -164,14 +176,17 @@
         .dashboard-header {
             margin-bottom: 30px;
             padding-bottom: 15px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e3f2fd;
         }
         .dashboard-header h1 {
-            color: var(--secondary-color);
+            color: var(--primary-color);
             font-size: 2.2em;
             font-weight: 700;
         }
-        .dashboard-header p { color: #6c757d; font-size: 1.1em; }
+        .dashboard-header p { 
+            color: #0d47a1; 
+            font-size: 1.1em; 
+        }
         .dashboard-metrics {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -179,11 +194,16 @@
             margin-bottom: 40px;
         }
         .metric-card {
-            background-color:rgb(150, 229, 255);
+            background-color: white;
             padding: 25px;
             border-radius: 12px;
             box-shadow: var(--shadow-light);
             border-left: 5px solid;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(13, 71, 161, 0.15);
         }
         .metric-card h3 {
             margin-top: 0;
@@ -191,26 +211,47 @@
             font-weight: 600;
             margin-bottom: 10px;
         }
-        .metric-card p { margin-bottom: 15px; color: #5a6470; }
-        .metric-card.alert { border-left-color: var(--alert-color);}
-        .metric-card.info { border-left-color: var(--info-color);}
-        .metric-card a { font-weight: 600; font-size: 0.95em; display: inline-block; }
+        .metric-card p { margin-bottom: 15px; color: #0d47a1; }
+        .metric-card.alert { 
+            border-left-color: var(--alert-color);
+        }
+        .metric-card.info { 
+            border-left-color: var(--info-color);
+        }
+        .metric-card a { 
+            font-weight: 600; 
+            font-size: 0.95em; 
+            display: inline-block;
+            color: var(--secondary-color);
+        }
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 30px;
         }
         .feature-card {
-            background-color: rgb(150, 229, 255);
+            background-color: white;
             padding: 30px;
             border-radius: 12px;
             box-shadow: var(--shadow-light);
             transition: transform 0.3s, box-shadow 0.3s;
             display: block;
+            border: 1px solid #e3f2fd;
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: #64b5f6;
         }
         .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(13, 71, 161, 0.15);
         }
         .feature-card .icon {
             font-size: 2.5em;
@@ -219,31 +260,51 @@
             width: fit-content;
             padding: 10px;
             border-radius: 50%;
-            background-color: rgba(0,123,255,0.1);
+            background-color: #e3f2fd;
+            color: #0d47a1;
         }
         .feature-card h2 {
             margin-top: 0;
             font-size: 1.5em;
             font-weight: 700;
-            color: var(--secondary-color);
+            color: var(--primary-color);
             margin-bottom: 10px;
         }
-        .feature-card p { color: #6c757d; }
-        .feature-card.appointments .icon { background-color: rgba(0,123,255,0.1);}
-        .feature-card.records .icon { background-color: rgba(40,167,69,0.1);}
-        .feature-card.prescriptions .icon { background-color: rgba(255,193,7,0.1);}
-        .feature-card.profile .icon { background-color: rgba(23,162,184,0.1);}
+        .feature-card p { color: #0d47a1; }
+        .feature-card.appointments .icon { background-color: rgba(100, 181, 246, 0.2);}
+        .feature-card.records .icon { background-color: rgba(0, 176, 155, 0.2);}
+        .feature-card.prescriptions .icon { background-color: rgba(255, 193, 7, 0.2);}
+        .feature-card.profile .icon { background-color: rgba(13, 71, 161, 0.2);}
         .site-footer {
             text-align: center;
             padding: 20px;
             margin-top: 50px;
-            border-top: 1px solid #5a5a5a;
-            background-color: #343a40;
-            color: #acacac;
+            border-top: 1px solid #e3f2fd;
+            background-color: #0d47a1;
+            color: white;
             font-size: 0.9em;
         }
         @media (max-width: 768px) {
             .main-nav { display: none; }
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animated text */
+        .animated-text {
+            display: inline-block;
+            color: #0d47a1;
+            font-weight: 700;
+            font-size: 1.3rem;
+            border-right: 3px solid #0d47a1;
+            animation: blink 0.7s step-end infinite alternate;
+            padding-right: 5px;
+        }
+        
+        @keyframes blink {
+            from { border-color: transparent }
+            to { border-color: #0d47a1 }
         }
     </style>
 </head>
@@ -255,9 +316,7 @@
         </div>
         <nav class="main-nav">
             <a href="patient-dashboard.html">Dashboard</a>
-            <!-- <a href="#">Appointments</a> -->
             <a href="billing.html">Bills</a>
-            <!-- <a href="#">Messages</a> -->
             <a href="index.html" class="logout-btn">Log Out</a>
         </nav>
     </header>
@@ -270,28 +329,28 @@
     </div>
     <nav class="sidebar-menu" id="sidebar-menu">
         <ul>
-            <li><a href="near_by_doctor.html"><span class="icon">🩺</span>Near By Doctor</a></li>
-            <li><a href="analyzer.html"><span class="icon">📊</span>Analyzer</a></li>
-            <li><a href="forum.html"><span class="icon">⚙️</span>Forum</a></li>
-            <li><a href="#"><span class="icon">🥦</span>NutriScan</a></li>
-            <li><a href="#"><span class="icon">⚙️</span>Settings</a></li>
+            <li><a href="near_by_doctor.html"><span class="icon"><i class="fas fa-user-md"></i></span>Near By Doctor</a></li>
+            <li><a href="analyzer.html"><span class="icon"><i class="fas fa-chart-line"></i></span>Analyzer</a></li>
+            <li><a href="forum.html"><span class="icon"><i class="fas fa-comments"></i></span>Forum</a></li>
+            <li><a href="#"><span class="icon"><i class="fas fa-apple-alt"></i></span>NutriScan</a></li>
+            <li><a href="#"><span class="icon"><i class="fas fa-cog"></i></span>Settings</a></li>
         </ul>
     </nav>
     <div class="menu-overlay" id="menu-overlay"></div>
 
     <main class="dashboard-section">
         <div class="dashboard-header">
-            <h1>Welcome Back, Patient Name!</h1>
-            <p>Your centralized hub for managing your health with Vital Link.</p>
+            <h1>Welcome Back, <span id="patient-name">Patient Name</span>!</h1>
+            <p>Your centralized hub for managing your health with <span class="animated-text"></span></p>
         </div>
         <div class="dashboard-metrics">
             <div class="metric-card alert">
-                <h3>🔔 Alert: New Message</h3>
+                <h3><i class="fas fa-bell"></i> Alert: New Message</h3>
                 <p>Dr. Smith sent follow-up instructions regarding your lab results.</p>
                 <a href="#">View Message →</a>
             </div>
             <div class="metric-card info">
-                <h3>🗓 Next Appointment</h3>
+                <h3><i class="fas fa-calendar-alt"></i> Next Appointment</h3>
                 <p>Cardiology Follow-up</p>
                 <p>Date: <strong>Oct 25, 2025 at 10:00 AM</strong></p>
                 <a href="schedule-appointment.html">Reschedule / Cancel →</a>
@@ -299,22 +358,22 @@
         </div>
         <div class="dashboard-grid">
             <a href="schedule-appointment.html" class="feature-card appointments">
-                <div class="icon">📅</div>
+                <div class="icon"><i class="fas fa-calendar-check"></i></div>
                 <h2>Schedule Appointment</h2>
                 <p>Book new visits with your primary care physician or specialists.</p>
             </a>
             <a href="medical_record.html" class="feature-card records">
-                <div class="icon">📄</div>
+                <div class="icon"><i class="fas fa-file-medical"></i></div>
                 <h2>My Medical Records</h2>
                 <p>View test results, immunization history, and clinical notes.</p>
             </a>
             <a href="prescriptions.html" class="feature-card prescriptions">
-                <div class="icon">💊</div>
+                <div class="icon"><i class="fas fa-pills"></i></div>
                 <h2>Prescriptions</h2>
                 <p>Request refills and check the status of your current medications.</p>
             </a>
             <a href="update-profile.html" class="feature-card profile">
-                <div class="icon">👤</div>
+                <div class="icon"><i class="fas fa-user-edit"></i></div>
                 <h2>Update Profile</h2>
                 <p>Manage your contact details, insurance, and emergency contacts.</p>
             </a>
@@ -327,18 +386,31 @@
         const hamburger = document.getElementById('hamburger-menu');
         const sidebar = document.getElementById('sidebar-menu');
         const overlay = document.getElementById('menu-overlay');
+        
         function openSidebar() {
             sidebar.classList.add('active');
             overlay.classList.add('active');
         }
+        
         function closeSidebar() {
             sidebar.classList.remove('active');
             overlay.classList.remove('active');
         }
+        
         hamburger.onclick = openSidebar;
         overlay.onclick = closeSidebar;
+
+        // Animated text
+        const words = ["Compassion", "Precision", "Care", "Health", "Wellness"];
+        let i = 0;
+        const animatedText = document.querySelector(".animated-text");
+        
+        setInterval(() => {
+            animatedText.textContent = words[i];
+            i = (i + 1) % words.length;
+        }, 2000);
     </script>
     <script src="https://cdn.botpress.cloud/webchat/v3.3/inject.js"></script>
-<script src="https://files.bpcontent.cloud/2025/02/14/17/20250214172051-7DFQJYIG.js" defer></script>
+    <script src="https://files.bpcontent.cloud/2025/02/14/17/20250214172051-7DFQJYIG.js" defer></script>
 </body>
 </html>
