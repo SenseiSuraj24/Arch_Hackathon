@@ -5,22 +5,305 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Heart Attack Risk Analyzer | Vital Link</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: #e3f2fd;
+            color: #0d47a1;
+            margin: 0;
+            padding: 0;
+            padding-top: 80px;
+        }
+
+        /* Navigation Bar */
+        .site-header {
+            background-color: #0d47a1;
+            box-shadow: 0 2px 4px rgba(13, 71, 161, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        
+        .logo img { 
+            height: 45px; 
+            width: auto;
+            object-fit: contain;
+        }
+        
+        .main-nav { 
+            display: flex; 
+            gap: 20px; 
+        }
+        
+        .main-nav a {
+            color: white;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+        
+        .main-nav a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .logout-btn {
+            background-color: #64b5f6;
+            color: white !important;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover { 
+            background-color: #0a3a8a;
+            transform: translateY(-2px);
+        }
+
+        .analyzer-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .analyzer-header {
+            background: #0d47a1;
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(13, 71, 161, 0.2);
+        }
+
+        .logo-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .icon {
+            font-size: 2.5em;
+        }
+
+        .analyzer-header h1 {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .analyzer-main {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .analyzer-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(13, 71, 161, 0.1);
+            border: 1px solid #e3f2fd;
+        }
+
+        .card-title {
+            color: #0d47a1;
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #64b5f6;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #0d47a1;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e3f2fd;
+            border-radius: 10px;
+            font-size: 1em;
+            color: #0d47a1;
+            background: #f5fbff;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #64b5f6;
+            box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2);
+            outline: none;
+            background: white;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .radio-group input[type="radio"] {
+            display: none;
+        }
+
+        .radio-group label {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #f5fbff;
+            border: 2px solid #e3f2fd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .radio-group input[type="radio"]:checked + label {
+            background: #0d47a1;
+            color: white;
+            border-color: #0d47a1;
+        }
+
+        .radio-group label:hover {
+            border-color: #64b5f6;
+        }
+
+        .action-button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .primary-button {
+            background: #0d47a1;
+            color: white;
+        }
+
+        .primary-button:hover {
+            background: #64b5f6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(13, 71, 161, 0.3);
+        }
+
+        .secondary-button {
+            background: #00b09b;
+            color: white;
+        }
+
+        .secondary-button:hover {
+            background: #009c82;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 176, 155, 0.3);
+        }
+
+        .result-display {
+            background: #f5fbff;
+            border: 1px solid #e3f2fd;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 100px;
+        }
+
+        #prediction-result-text {
+            color: #0d47a1;
+            font-size: 1.2em;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        #full-report-text {
+            color: #0d47a1;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .analyzer-footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            color: #0d47a1;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .main-nav { 
+                display: none; 
+            }
+            
+            .analyzer-container {
+                margin: 20px auto;
+                padding: 15px;
+            }
+            
+            .analyzer-header {
+                padding: 20px;
+            }
+            
+            .analyzer-header h1 {
+                font-size: 1.8em;
+            }
+            
+            .analyzer-card {
+                padding: 20px;
+            }
+            
+            .radio-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
 </head>
 <body class="analyzer-page">
+
+    <!-- Navigation Bar -->
+    <header class="site-header">
+        <div class="logo">
+            <img src="vital-link-logo.png" alt="Vital Link Logo">
+        </div>
+        <nav class="main-nav">
+            <a href="patient-dashboard.html">Dashboard</a>
+            <a href="billing.html">Bills</a>
+            <a href="index.html" class="logout-btn">Log Out</a>
+        </nav>
+    </header>
 
     <div class="analyzer-container">
 
         <header class="analyzer-header">
             <div class="logo-title">
-                <span class="icon">❤</span> 
+                <span class="icon">❤️</span> 
                 <h1>Heart Attack Risk Analyzer</h1>
             </div>
-            <div class="user-actions">
-                </div>
         </header>
 
-        <main class="analyzer-main"> 
+        <main class="analyzer-main">
 
             <section class="analyzer-card settings-card">
                 <h2 class="card-title">General Settings</h2>
@@ -29,7 +312,6 @@
                     <div class="radio-group">
                         <input type="radio" id="lang-english" name="language" value="english" checked>
                         <label for="lang-english">English</label>
-                        
                     </div>
                 </div>
             </section>
@@ -188,7 +470,7 @@ Disclaimer: This tool is for informational purposes only and does not constitute
         const reportContent = document.getElementById('full-report-text').textContent;
         
         // Set document title and metadata
-        const fileName = VitalLink_RiskReport_${new Date().toISOString().slice(0, 10)}.pdf;
+        const fileName = `VitalLink_RiskReport_${new Date().toISOString().slice(0, 10)}.pdf`;
 
         // Add the text content to the PDF
         // Parameters: text, x-coordinate, y-coordinate
@@ -215,8 +497,6 @@ Disclaimer: This tool is for informational purposes only and does not constitute
     
     // Initial setup: Hide the Download Report button until analysis is complete
     secondaryButton.style.display = 'none';
-
-</script>
-
+    </script>
 </body>
 </html>
