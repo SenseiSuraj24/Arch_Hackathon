@@ -315,8 +315,8 @@
             <img src="vital-link-logo.png" alt="Vital Link Logo">
         </div>
         <nav class="main-nav">
-            <a href="patient-dashboard.html">Dashboard</a>
-            <a href="billing.html">Bills</a>
+            <a href="#">Dashboard</a>
+            <a href="#">Bills</a>
             <a href="index.html" class="logout-btn">Log Out</a>
         </nav>
     </header>
@@ -329,9 +329,9 @@
     </div>
     <nav class="sidebar-menu" id="sidebar-menu">
         <ul>
-            <li><a href="near_by_doctor.html"><span class="icon"><i class="fas fa-user-md"></i></span>Near By Doctor</a></li>
-            <li><a href="analyzer.html"><span class="icon"><i class="fas fa-chart-line"></i></span>Analyzer</a></li>
-            <li><a href="forum.html"><span class="icon"><i class="fas fa-comments"></i></span>Forum</a></li>
+            <li><a href="#"><span class="icon"><i class="fas fa-user-md"></i></span>Near By Doctor</a></li>
+            <li><a href="/analyzer"><span class="icon"><i class="fas fa-chart-line"></i></span>Analyzer</a></li>
+            <li><a href="#"><span class="icon"><i class="fas fa-comments"></i></span>Forum</a></li>
             <li><a href="#"><span class="icon"><i class="fas fa-apple-alt"></i></span>NutriScan</a></li>
             <li><a href="#"><span class="icon"><i class="fas fa-cog"></i></span>Settings</a></li>
         </ul>
@@ -340,7 +340,7 @@
 
     <main class="dashboard-section">
         <div class="dashboard-header">
-            <h1>Welcome Back, <span id="patient-name">Patient Name</span>!</h1>
+            <h1>Welcome Back, <span id="patient-name">{{ patient_name }}!</span>!</h1>
             <p>Your centralized hub for managing your health with <span class="animated-text"></span></p>
         </div>
         <div class="dashboard-metrics">
@@ -349,30 +349,41 @@
                 <p>Dr. Smith sent follow-up instructions regarding your lab results.</p>
                 <a href="#">View Message →</a>
             </div>
+            {% if appointment %}
             <div class="metric-card info">
                 <h3><i class="fas fa-calendar-alt"></i> Next Appointment</h3>
-                <p>Cardiology Follow-up</p>
-                <p>Date: <strong>Oct 25, 2025 at 10:00 AM</strong></p>
-                <a href="schedule-appointment.html">Reschedule / Cancel →</a>
+                <p>{{ appointment.department }} with Dr. {{ appointment.doctor_name }}</p>
+                <p>Date: <strong>{{ appointment.appointment_date }} at {{ appointment.appointment_time }}</strong></p>
+                
+                
+                <a href="{{ url_for('schedule_appointment') }}">Reschedule / Cancel →</a>
             </div>
+            {% else %}
+            <div class="metric-card alert">
+                <h3>📅 No Appointments Scheduled</h3>
+                <p>You don’t have any upcoming visits.</p>
+                <a href="{{ url_for('schedule_appointment') }}">Book Now →</a>
+            </div>
+            {% endif %}
         </div>
+
         <div class="dashboard-grid">
-            <a href="schedule-appointment.html" class="feature-card appointments">
+            <a href="/schedule_appointment" class="feature-card appointments">
                 <div class="icon"><i class="fas fa-calendar-check"></i></div>
                 <h2>Schedule Appointment</h2>
                 <p>Book new visits with your primary care physician or specialists.</p>
             </a>
-            <a href="medical_record.html" class="feature-card records">
+            <a href="/medical_records" class="feature-card records">
                 <div class="icon"><i class="fas fa-file-medical"></i></div>
                 <h2>My Medical Records</h2>
                 <p>View test results, immunization history, and clinical notes.</p>
             </a>
-            <a href="prescriptions.html" class="feature-card prescriptions">
+            <a href="#" class="feature-card prescriptions">
                 <div class="icon"><i class="fas fa-pills"></i></div>
                 <h2>Prescriptions</h2>
                 <p>Request refills and check the status of your current medications.</p>
             </a>
-            <a href="update-profile.html" class="feature-card profile">
+            <a href="/update_profile" class="feature-card profile">
                 <div class="icon"><i class="fas fa-user-edit"></i></div>
                 <h2>Update Profile</h2>
                 <p>Manage your contact details, insurance, and emergency contacts.</p>
