@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nearby Doctors Finder</title>
+  <title>Find Specialized Doctors Near You</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
   <style>
@@ -28,7 +28,7 @@
       gap: 10px;
       flex-wrap: wrap;
     }
-    input {
+    input, select {
       padding: 10px;
       width: 250px;
       border-radius: 5px;
@@ -66,6 +66,11 @@
       padding: 10px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       text-align: left;
+      transition: 0.3s;
+    }
+    .doctor-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
     .doctor-card h3 {
       color: #007bff;
@@ -77,11 +82,22 @@
   </style>
 </head>
 <body>
-  <header>Nearby Doctors Finder</header>
+  <header>Find Specialized Doctors Near You</header>
 
   <div id="controls">
-    <input type="text" id="search" placeholder="Search by name or specialty" />
-    <button onclick="searchDoctors()">Search</button>
+    <select id="specialty">
+      <option value="">Select Specialty</option>
+      <option value="cardiologist">Cardiologist</option>
+      <option value="dentist">Dentist</option>
+      <option value="dermatologist">Dermatologist</option>
+      <option value="neurologist">Neurologist</option>
+      <option value="gynecologist">Gynecologist</option>
+      <option value="pediatrician">Pediatrician</option>
+      <option value="orthopedic">Orthopedic</option>
+      <option value="psychiatrist">Psychiatrist</option>
+      <option value="general">General Practitioner</option>
+    </select>
+    <button onclick="filterBySpecialty()">Find</button>
     <button class="back-btn" onclick="goBack()">⬅ Back to Dashboard</button>
   </div>
 
@@ -93,18 +109,6 @@
     let allDoctors = [];
     let markers = [];
 
-    // Haversine distance (in km)
-    function distance(lat1, lon1, lat2, lon2) {
-      const R = 6371;
-      const dLat = (lat2 - lat1) * Math.PI / 180;
-      const dLon = (lon2 - lon1) * Math.PI / 180;
-      const a = Math.sin(dLat/2)**2 +
-        Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) *
-        Math.sin(dLon/2)**2;
-      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    }
-
-    // Initialize map and get user location
     function initMap() {
       if (!navigator.geolocation) {
         alert("Geolocation is not supported by your browser.");
@@ -116,13 +120,13 @@
         const userLon = pos.coords.longitude;
 
         map = L.map('map').setView([userLat, userLon], 13);
-
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 19,
           attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        L.marker([userLat, userLon]).addTo(map)
+        L.marker([userLat, userLon])
+          .addTo(map)
           .bindPopup("You are here")
           .openPopup();
 
@@ -133,9 +137,9 @@
       });
     }
 
-    // Fetch doctors/clinics/hospitals using Overpass API
+    // Fetch doctors from Overpass API (OpenStreetMap)
     function fetchNearbyDoctors(lat, lon) {
-      const radius = 5000; // 5 km radius
+      const radius = 5000; // 5 km
       const query = `
         [out:json];
         (
@@ -164,7 +168,6 @@
       .catch(() => alert("Failed to fetch nearby doctors. Try again later."));
     }
 
-    // Display doctors on map and list
     function displayDoctors(doctors) {
       markers.forEach(m => map.removeLayer(m));
       markers = [];
@@ -186,23 +189,35 @@
       });
 
       if (doctors.length === 0) {
-        list.innerHTML = "<p>No doctors found nearby.</p>";
+        list.innerHTML = "<p>No specialized doctors found nearby.</p>";
       }
     }
 
-    // Search filter
-    function searchDoctors() {
-      const term = document.getElementById("search").value.toLowerCase();
-      const filtered = allDoctors.filter(
-        d => d.name.toLowerCase().includes(term) ||
-             d.specialty.toLowerCase().includes(term)
+    // Filter by selected specialty
+    function filterBySpecialty() {
+      const specialty = document.getElementById("specialty").value.toLowerCase();
+
+      if (!specialty) {
+        displayDoctors(allDoctors);
+        return;
+      }
+
+      const filtered = allDoctors.filter(d => 
+        d.specialty.toLowerCase().includes(specialty) ||
+        d.name.toLowerCase().includes(specialty)
       );
+
       displayDoctors(filtered);
+
+      // Zoom map to the filtered doctors
+      if (filtered.length > 0) {
+        const group = L.featureGroup(filtered.map(doc => L.marker([doc.lat, doc.lon])));
+        map.fitBounds(group.getBounds().pad(0.2));
+      }
     }
 
-    // Back button
     function goBack() {
-      window.location.href = "patient-dashboard.html"; // adjust your dashboard file name
+      window.location.href = "patient-dashboard.html"; // update link to your dashboard
     }
 
     window.onload = initMap;
